@@ -24,8 +24,12 @@ Audited 2026-08-28. Counts exclude labels, medication sample values, and repeate
 | Enter each medication, amount, and scheduled time. | 7 |
 | Choose Taken, Held, or Unknown and add a note. | 9 |
 | Print the card, show a QR handoff, or export a backup. | 11 |
-| A QR handoff contains today’s active regimen and dose states. | 10 |
 | It is not encrypted; use it only with someone you trust. | 11 |
+| Choose today or an earlier date. | 6 |
+| A QR handoff contains the selected date’s active regimen and dose states. | 11 |
+| Existing dose history stays in this record. | 7 |
+| No dose states or regimen changes were recorded for this date. | 11 |
+| Future doses cannot be recorded. | 5 |
 
 ## Terminology
 

@@ -52,7 +52,7 @@ test('@claim:local-only complete demo flow sends no request off origin', async (
   page.once('dialog', dialog => dialog.accept('Demo note'))
   await page.locator('[data-action="dose"][data-state="taken"]').first().click()
   await page.getByRole('button', { name: 'Show QR handoff' }).click()
-  await expect(page.getByAltText('QR code containing today’s medication handoff data.')).toBeVisible()
+  await expect(page.getByAltText('QR code containing the selected medication handoff data.')).toBeVisible()
   await expect(page.locator('input[type="password"],a[href*="login"],a[href*="signin"]')).toHaveCount(0)
   expect(external).toEqual([])
 })
@@ -91,7 +91,7 @@ test('@claim:encrypted-backup creates an AES-GCM passphrase backup locally', asy
 test('@claim:qr-handoff creates an interpretable handoff QR in the browser', async ({ page }) => {
   await page.goto('/demo')
   await page.getByRole('button', { name: 'Show QR handoff' }).click()
-  const qr = page.getByAltText('QR code containing today’s medication handoff data.')
+  const qr = page.getByAltText('QR code containing the selected medication handoff data.')
   await expect(qr).toHaveAttribute('src', /^data:image\/png/)
   const image = await qr.evaluate(async element => {
     const source = element as HTMLImageElement
@@ -108,17 +108,40 @@ test('@claim:qr-handoff creates an interpretable handoff QR in the browser', asy
   expect(payload.version).toBe(2)
   expect(payload.doses.every(dose => payload.regimen.some(medication => medication.medicationId === dose.medicationId))).toBe(true)
   await page.getByRole('button', { name: 'Hide QR code' }).click()
-  await expect(page.getByAltText('QR code containing today’s medication handoff data.')).toHaveCount(0)
+  await expect(page.getByAltText('QR code containing the selected medication handoff data.')).toHaveCount(0)
+  await page.getByRole('button', { name: 'Show QR handoff' }).click()
+  await expect(page.getByAltText('QR code containing the selected medication handoff data.')).toBeVisible()
+  await page.reload()
+  await expect(page.getByAltText('QR code containing the selected medication handoff data.')).toHaveCount(0)
 })
 
-test('@claim:print-handoff keeps the handoff and removes tools from print', async ({ page }) => {
-  await page.goto('/demo')
+test('@claim:print-handoff fits eight medications on one A4 or Letter page', async ({ page }) => {
+  await page.goto('/')
+  const now = new Date().toISOString()
+  const printSlots = ['Morning', 'Noon', 'Evening', 'Bedtime'] as const
+  const medications = Array.from({ length: 8 }, (_, index) => ({
+    id: `print-med-${index + 1}`,
+    name: `Medication ${index + 1}`,
+    dose: `${index + 1}0 mg`,
+    instructions: 'Follow the written care plan',
+    slots: [printSlots[index % printSlots.length]],
+    active: true,
+    changedAt: now
+  }))
+  const backup = { personName: 'Representative eight-medication case', shiftNote: 'Review each dose state at handoff.', medications, logs: [], regimenChanges: [], updatedAt: now }
+  page.once('dialog', dialog => dialog.accept())
+  await page.locator('#import-file').setInputFiles({ name: 'eight-medications.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(backup)) })
+  await expect(page.getByText('Representative eight-medication case')).toBeVisible()
   await page.evaluate(() => { (window as typeof window & { printCalled?: boolean }).print = () => { (window as typeof window & { printCalled?: boolean }).printCalled = true } })
   await page.getByRole('button', { name: 'Print handoff' }).click()
   expect(await page.evaluate(() => (window as typeof window & { printCalled?: boolean }).printCalled)).toBe(true)
   await page.emulateMedia({ media: 'print' })
   await expect(page.getByRole('heading', { name: 'Today’s handoff' })).toBeVisible()
   await expect(page.locator('#tools')).toBeHidden()
+  for (const format of ['A4', 'Letter'] as const) {
+    const pdf = await page.pdf({ format, printBackground: true })
+    expect((pdf.toString('latin1').match(/\/Type \/Page\b/g) || []).length).toBe(1)
+  }
 })
 
 test('@claim:free-tools exposes every handoff tool without a checkout', async ({ page }) => {
@@ -143,7 +166,7 @@ test('@claim:current-medication-list retains complete regimen details after relo
   await addMedication(page, 'Current list medicine')
   await page.reload()
   await expect(page.getByText('Current list medicine').first()).toBeVisible()
-  await expect(page.getByText('5 mg · Morning')).toBeVisible()
+  await expect(page.getByText('5 mg · Morning', { exact: true })).toBeVisible()
   await expect(page.getByText('with breakfast', { exact: true })).toBeVisible()
 })
 
@@ -167,6 +190,7 @@ test('@claim:real-record-retention keeps a saved real medication after reload', 
 test('@claim:regimen-history records the prior and new regimen', async ({ page }) => {
   await page.goto('/')
   await addMedication(page, 'Changing medicine')
+  await expect(page.getByText('Medication started')).toBeVisible()
   await page.getByRole('button', { name: 'Edit' }).click()
   await page.getByLabel('Dose / amount').fill('10 mg')
   await page.getByRole('checkbox', { name: 'Morning' }).uncheck()
@@ -174,4 +198,45 @@ test('@claim:regimen-history records the prior and new regimen', async ({ page }
   await page.getByRole('button', { name: 'Save medication' }).click()
   await expect(page.getByText('Regimen changed')).toBeVisible()
   await expect(page.getByText('Was 5 mg · Morning. Now 10 mg · Evening.')).toBeVisible()
+})
+
+test('@claim:stopped-history retains the dose and regimen trail after the last medication stops', async ({ page }) => {
+  await page.goto('/')
+  await addMedication(page, 'Stopped medicine')
+  page.once('dialog', dialog => dialog.accept('Waiting for a new prescription'))
+  await page.locator('[data-action="dose"][data-state="held"]').click()
+  await page.getByRole('button', { name: 'Edit' }).click()
+  await page.getByLabel('Dose / amount').fill('10 mg')
+  await page.getByRole('checkbox', { name: 'Morning' }).uncheck()
+  await page.getByRole('checkbox', { name: 'Evening' }).check()
+  await page.getByRole('button', { name: 'Save medication' }).click()
+  page.once('dialog', dialog => dialog.accept())
+  await page.getByRole('button', { name: 'Stop' }).click()
+  await page.reload()
+  await expect(page.getByRole('heading', { name: 'Today’s handoff' })).toBeVisible()
+  await expect(page.getByText('No active medications yet.')).toBeVisible()
+  await expect(page.getByText('Medication stopped')).toBeVisible()
+  await expect(page.getByText('Existing dose history stays in this record.')).toBeVisible()
+  await expect(page.getByText('Ⅱ Held')).toBeVisible()
+  await expect(page.getByText('“Waiting for a new prescription”')).toBeVisible()
+  await expect(page.getByText('Was 5 mg · Morning. Now 10 mg · Evening.')).toBeVisible()
+})
+
+test('@claim:no-future-doses rejects future dates before a dose can be recorded', async ({ page }) => {
+  await page.goto('/')
+  await addMedication(page, 'Date-boundary medicine')
+  const today = await page.locator('#date').getAttribute('max')
+  await page.locator('#date').fill('2099-12-31')
+  await expect(page.locator('#date')).toHaveValue(today!)
+  await expect(page.locator('.toast')).toContainText('Future doses cannot be recorded')
+  const stored = await page.evaluate(async () => new Promise<{ logs: Array<{ date: string }> }>((resolve, reject) => {
+    const request = indexedDB.open('med-handoff-card', 1)
+    request.onerror = () => reject(request.error)
+    request.onsuccess = () => {
+      const get = request.result.transaction('records', 'readonly').objectStore('records').get('current')
+      get.onerror = () => reject(get.error)
+      get.onsuccess = () => resolve(get.result)
+    }
+  }))
+  expect(stored.logs.some(log => log.date === '2099-12-31')).toBe(false)
 })

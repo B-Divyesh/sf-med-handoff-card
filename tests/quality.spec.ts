@@ -52,6 +52,19 @@ test('keyboard opens the medication dialog, focuses its label, and announces err
   await expect(page.locator('.form-error')).toHaveAttribute('aria-live', 'assertive')
 })
 
+test('keyboard reaches and activates Import backup', async ({ page }) => {
+  await page.goto('/demo')
+  const importButton = page.getByRole('button', { name: 'Import backup', exact: true })
+  await page.getByRole('button', { name: 'Export backup' }).focus()
+  await page.keyboard.press('Tab')
+  await expect(importButton).toBeFocused()
+  const chooserPromise = page.waitForEvent('filechooser')
+  await page.keyboard.press('Enter')
+  const chooser = await chooserPromise
+  await chooser.setFiles({ name: 'broken.json', mimeType: 'application/json', buffer: Buffer.from('{}') })
+  await expect(page.locator('.toast')).toContainText('Could not import that backup')
+})
+
 test('invalid backup, blank required fields, dialog naming, and focus recovery are safe', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('button', { name: 'Add your first medication' }).click()
@@ -113,7 +126,7 @@ test('a waiting service worker is told to activate before the app reloads', asyn
     await page.evaluate(() => navigator.serviceWorker.ready)
     await page.reload()
     await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true)
-    await writeFile(workerPath, original.replace("med-handoff-v4", `med-handoff-v4-test-${Date.now()}`))
+    await writeFile(workerPath, original.replace("med-handoff-v5", `med-handoff-v5-test-${Date.now()}`))
     await page.evaluate(async () => { const registration = await navigator.serviceWorker.getRegistration(); await registration?.update() })
     await expect(page.getByRole('button', { name: 'Install update' })).toBeVisible()
     const loaded = page.waitForEvent('load')

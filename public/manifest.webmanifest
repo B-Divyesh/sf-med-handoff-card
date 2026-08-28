@@ -2,7 +2,7 @@
   "name": "Med Handoff Card",
   "short_name": "Med Handoff",
   "description": "Private, printable medication shift handoffs.",
-  "start_url": "/?v=2",
+  "start_url": "/?v=4",
   "display": "standalone",
   "background_color": "#f7f0df",
   "theme_color": "#f7f0df",
