@@ -1,0 +1,38 @@
+Response headers:
+HTTP/2 200
+content-type: text/html
+date: Fri, 28 Aug 2026 23:34:57 GMT
+accept-ranges: bytes
+cache-control: public, must-revalidate, max-age=30
+etag: "26667954"
+last-modified: Fri, 28 Aug 2026 23:32:48 GMT
+content-length: 2210
+strict-transport-security: max-age=10886400; includeSubDomains; preload
+referrer-policy: no-referrer
+x-content-type-options: nosniff
+x-xss-protection: 1; mode=block
+x-dns-prefetch-control: off
+content-security-policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; worker-src 'self'
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=()
+x-frame-options: DENY
+
+Status and content types:
+/ 200 text/html
+/demo 200 text/html
+/privacy 200 text/html
+/terms 200 text/html
+/manifest.webmanifest 200 application/manifest+json
+/robots.txt 200 text/plain
+/sitemap.xml 200 text/xml
+/missing-polish-3-evidence 404 text/html
+SHA-256 local/live:
+index.html local 88b61903573e6d323fbcfbb045df8830b4fdea16486fc988c455828646144a55
+index.html live  88b61903573e6d323fbcfbb045df8830b4fdea16486fc988c455828646144a55
+sw.js local 4aff383ca2db06209331bc7c57ccc7708f1c9400ebfb8faf877e9454aa6257aa
+sw.js live  4aff383ca2db06209331bc7c57ccc7708f1c9400ebfb8faf877e9454aa6257aa
+manifest.webmanifest local e7156ec94a9503172fc20a5f07fb51c04b77cb7b166fc7ce34c12c690df171fe
+manifest.webmanifest live  e7156ec94a9503172fc20a5f07fb51c04b77cb7b166fc7ce34c12c690df171fe
+assets/main-DLcf5DJt.js local 31365ae7f27fa961757c74c6d19f21d57646c44ebd4eb12a3dc641959587e640
+assets/main-DLcf5DJt.js live  31365ae7f27fa961757c74c6d19f21d57646c44ebd4eb12a3dc641959587e640
+assets/main-CXO0BZrb.css local 5af50378c3cc76fb2c3585fcbd9211225fa93b03400f1c2b602205ec78062b48
+assets/main-CXO0BZrb.css live  5af50378c3cc76fb2c3585fcbd9211225fa93b03400f1c2b602205ec78062b48
