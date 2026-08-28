@@ -1,0 +1,54 @@
+{
+  "base": "https://med-handoff-card.sociobot.in",
+  "checkedAt": "2026-08-28T20:32:02.058Z",
+  "routes": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/demo",
+      "status": 200
+    },
+    {
+      "path": "/privacy",
+      "status": 200
+    },
+    {
+      "path": "/terms",
+      "status": 200
+    },
+    {
+      "path": "/repair-4-missing",
+      "status": 404
+    }
+  ],
+  "demo": {
+    "axeBlockingLight": 0,
+    "axeBlockingDark": 0,
+    "importKeyboardReached": true,
+    "qrClearedOnReload": true,
+    "offlineReload": true,
+    "offOriginRequests": []
+  },
+  "mobile": {
+    "scrollWidth": 390,
+    "undersizedTargets": [],
+    "text200ScrollWidth": 390
+  },
+  "real": {
+    "futureRejected": true,
+    "activeAfterStop": false,
+    "logs": 1,
+    "regimenChanges": 3,
+    "historyVisibleAfterReload": true,
+    "offOriginRequests": []
+  },
+  "print": {
+    "pages": {
+      "A4": 1,
+      "Letter": 1
+    }
+  },
+  "errors": []
+}
