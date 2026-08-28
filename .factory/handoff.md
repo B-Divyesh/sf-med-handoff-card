@@ -69,7 +69,17 @@ Local release checks also passed:
 Artifact class remains `pwa-offline`; deployment remains static `dist/` via the
 repository’s Azure Static Web Apps configuration. No infrastructure, DNS,
 billing, accounts, analytics, third-party runtime services, AI calls, or paid
-features were added.
+features were added. `main` was pushed to `origin` at
+`8955a16ac52142e4d2f12dcb1a59011b4fe3c7d5`.
 
-No known release blockers remain. After the factory deployment completes, use
+The direct authorized `swa deploy dist --app-name med-handoff-card --env
+production --swa-config-location public` command authenticated successfully,
+then stalled while resolving the Azure project settings and did not report a
+deployment. Its CLI-created local `.env` credentials file was removed without
+being read or committed. At handoff the live URL still serves the prior index
+hash `cfae52cb929c7f461c309ad39bdb6d360c0280cd91bc29b99253719fc23bd4f6`,
+not this build. This is an external deployment-configuration follow-up, not a
+build or product-QA failure.
+
+No product release blockers remain. After the factory deployment completes, use
 the live `/demo` URL for the final byte-identity and response-header check.
