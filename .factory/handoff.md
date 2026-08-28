@@ -1,6 +1,6 @@
 # Med Handoff Card — repair handoff
 
-## Release status: PASS locally
+## Release status: PASS — deployed
 
 Repaired the release blockers reported in verifier commit `c64a14a838688927712a65805196204ac77c8788` for candidate `1a9aa597d3de2d1e41ee413c5b9c9d893773a28e`.
 
@@ -38,7 +38,18 @@ The existing medication list, Taken/Held/Unknown workflow, notes, history, QR, p
 - `/opt/fleet/lib/verify-url.sh http://127.0.0.1:4280 .factory/qa-evidence/repair-swa-verify-url` — PASS in 624 ms with title, `lang=en`, one h1, main, alt text, labels, and 0 browser errors.
 - Lighthouse mobile on `/demo` — performance 100, accessibility 100, best practices 100, SEO 100; LCP 1.1 s, CLS 0, total blocking time 0 ms.
 
-Evidence is in `.factory/qa-evidence/repair-*`.
+## Live verification
+
+- Deployed product commit: `fb44e8e4`, pushed to `origin/main`.
+- Azure deployment: `6b0b02ba-a3b9-4255-bb9c-583b07379488`, status Succeeded.
+- Live URL: `https://med-handoff-card.sociobot.in`.
+- Live identity matches `dist`: index SHA-256 `cfae52cb929c7f461c309ad39bdb6d360c0280cd91bc29b99253719fc23bd4f6`; JS SHA-256 `b40f31c6d5e040eade0cc0051ad31a2103778ba547dc14cce1f07d52e4e353bf`; service worker SHA-256 `483848335f0ba8aee6c5d21a5bd827fc2e8e7ba0625fc0c2de9ba59fd6a0f468`.
+- Live response policy: `/demo` 200, unknown route 404, manifest MIME correct, hashed JS immutable, and CSP present on root, assets, and the 404.
+- Live 390 × 844 browser: banner present, canonical `/demo`, one h1, 0 px overflow, 0 serious/critical axe findings, 0 console errors, 0 external requests, and offline reload passed.
+- Live `verify-url.sh` — PASS in 807 ms with no browser errors.
+- Live Lighthouse mobile — performance 100, accessibility 100, best practices 100, SEO 100; LCP 1.1 s, CLS 0, total blocking time 70 ms.
+
+Evidence is in `.factory/qa-evidence/repair-*`, including the live Lighthouse and URL verification outputs.
 
 ## Deploy
 
