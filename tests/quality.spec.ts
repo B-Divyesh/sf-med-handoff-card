@@ -11,6 +11,13 @@ test('how-to heading and third step name the caregiver actions', async ({ page }
   await expect(section).not.toContainText('Hand it over.')
 })
 
+test('public footer omits the untestable artwork provenance claim', async ({ page }) => {
+  for (const path of ['/', '/demo', '/privacy', '/terms', '/404.html']) {
+    await page.goto(path)
+    await expect(page.getByRole('contentinfo')).not.toContainText('Original artwork was generated for Med Handoff Card')
+  }
+})
+
 test('desktop and mobile have one heading, no console errors, and no serious axe findings', async ({ browser }) => {
   for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
     const context = await browser.newContext({ viewport })
@@ -138,7 +145,8 @@ test('real routes update metadata, share chrome, announce navigation, and restor
   await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute('content', 'Privacy — Med Handoff Card')
   await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute('href', '/icons/apple-touch-icon.png')
   await expect(page.getByRole('button', { name: 'Use night view' })).toBeVisible()
-  await expect(page.getByRole('contentinfo')).toContainText('Original artwork was generated for Med Handoff Card')
+  await expect(page.getByRole('contentinfo')).not.toContainText('Original artwork was generated for Med Handoff Card')
+  await expect(page.getByRole('contentinfo')).toContainText('The app loads no analytics or code from other sites.')
   await expect(page.locator('.route-status')).toHaveText('Privacy — Med Handoff Card loaded')
 
   await page.goBack()
@@ -174,7 +182,7 @@ test('a waiting service worker is told to activate before the app reloads', asyn
     await page.evaluate(() => navigator.serviceWorker.ready)
     await page.reload()
     await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true)
-    await writeFile(workerPath, original.replace("med-handoff-v6", `med-handoff-v6-test-${Date.now()}`))
+    await writeFile(workerPath, original.replace("med-handoff-v7", `med-handoff-v7-test-${Date.now()}`))
     await page.evaluate(async () => { const registration = await navigator.serviceWorker.getRegistration(); await registration?.update() })
     await expect(page.getByRole('button', { name: 'Install update' })).toBeVisible()
     const loaded = page.waitForEvent('load')

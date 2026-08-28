@@ -1,6 +1,6 @@
 # Copy audit
 
-Audited 2026-08-28 for polish round 2. Counts use whitespace-delimited words. No sentence exceeds 22 words. No banned marketing word appears.
+Audited 2026-08-28 for polish round 3. Counts use whitespace-delimited words. No sentence exceeds 22 words. No banned marketing word appears.
 
 ## First screen
 
@@ -41,7 +41,6 @@ The headline names the job in six words. The audience sentence names the situati
 | A QR handoff contains the selected date, current medication list, and dose states. | 13 |
 | Anyone who scans it can read it, so share it only with someone you trust. | 14 |
 | Track medication handoffs between family caregivers. | 6 |
-| Original artwork was generated for Med Handoff Card. | 8 |
 | The app loads no analytics or code from other sites. | 10 |
 
 ## Demo and board

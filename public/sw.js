@@ -1,4 +1,4 @@
-const VERSION = 'med-handoff-v6'
+const VERSION = 'med-handoff-v7'
 const SHELL = ['/', '/demo', '/index.html', '/demo/index.html', '/manifest.webmanifest', '/offline.html', '/404.html', '/privacy/index.html', '/terms/index.html', '/icons/icon-192.svg', '/icons/icon-512.svg', '/icons/apple-touch-icon.png']
 
 self.addEventListener('install', event => event.waitUntil(caches.open(VERSION).then(cache => cache.addAll(SHELL))))

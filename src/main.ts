@@ -25,7 +25,7 @@ let demoMode = isDemoUrl()
 const themeKey = () => demoMode ? 'demo:mhc_theme' : 'mhc_theme'
 let theme = localStorage.getItem(themeKey()) || 'light'
 let focusAfterRender = ''
-const BUILD_ID = '2026.08.28-polish.2'
+const BUILD_ID = '2026.08.28-polish.3'
 
 async function save(next = data) {
   data = next
@@ -50,7 +50,7 @@ function htmlShell(content: string) {
   const demoBanner = demoMode ? `<aside class="demo-banner" aria-label="Demo mode"><strong>Demo — sample data, nothing is saved to your real record</strong><span>Dose changes in this demo do not change your real record.</span><div><button class="banner-button" data-action="reset-demo">Reset demo</button><button class="banner-button" data-action="start-real">Start for real</button></div></aside>` : ''
   const path = currentPath()
   const toolsHref = path === '/' && !demoMode ? '#tools' : '/#tools'
-  return `${demoBanner}<header class="masthead"><a class="brand" href="/" aria-label="Med Handoff Card home"><span class="brand-mark">MH</span><span>Med Handoff<br>Card</span></a><nav aria-label="Primary"><a href="/" ${path === '/' && !demoMode ? 'aria-current="page"' : ''}>Board</a><a href="/demo" ${demoMode ? 'aria-current="page"' : ''}>Demo</a><a href="${toolsHref}">Tools</a><a href="/privacy" ${path === '/privacy' ? 'aria-current="page"' : ''}>Privacy</a></nav><button class="theme" type="button" data-action="theme">${theme === 'dark' ? '☼ Use light view' : '◐ Use night view'}</button></header><main id="main">${content}</main><footer><span>Track medication handoffs between family caregivers.</span><span><a href="/privacy">Privacy</a> <a href="/terms">Terms</a></span><small>Built by Param Factory · version ${BUILD_ID} · Original artwork was generated for Med Handoff Card. The app loads no analytics or code from other sites.</small></footer><div class="route-status sr-only" aria-live="polite"></div><div class="toast" aria-live="polite">${updateReady ? 'An update is ready. ' : ''}${message}${updateReady ? ' <button data-action="update">Install update</button>' : ''}</div>`
+  return `${demoBanner}<header class="masthead"><a class="brand" href="/" aria-label="Med Handoff Card home"><span class="brand-mark">MH</span><span>Med Handoff<br>Card</span></a><nav aria-label="Primary"><a href="/" ${path === '/' && !demoMode ? 'aria-current="page"' : ''}>Board</a><a href="/demo" ${demoMode ? 'aria-current="page"' : ''}>Demo</a><a href="${toolsHref}">Tools</a><a href="/privacy" ${path === '/privacy' ? 'aria-current="page"' : ''}>Privacy</a></nav><button class="theme" type="button" data-action="theme">${theme === 'dark' ? '☼ Use light view' : '◐ Use night view'}</button></header><main id="main">${content}</main><footer><span>Track medication handoffs between family caregivers.</span><span><a href="/privacy">Privacy</a> <a href="/terms">Terms</a></span><small>Built by Param Factory · version ${BUILD_ID} · The app loads no analytics or code from other sites.</small></footer><div class="route-status sr-only" aria-live="polite"></div><div class="toast" aria-live="polite">${updateReady ? 'An update is ready. ' : ''}${message}${updateReady ? ' <button data-action="update">Install update</button>' : ''}</div>`
 }
 
 function board() {

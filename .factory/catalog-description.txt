@@ -1,1 +1,1 @@
-Track medication handoffs and dose states between family caregivers.
+Record medication handoffs and dose states for the next family caregiver.
