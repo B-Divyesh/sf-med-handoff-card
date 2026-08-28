@@ -1,4 +1,4 @@
-const VERSION = 'med-handoff-v3'
+const VERSION = 'med-handoff-v4'
 const SHELL = ['/', '/demo', '/index.html', '/manifest.webmanifest', '/offline.html', '/404.html', '/privacy/index.html', '/terms/index.html', '/icons/icon-192.svg', '/icons/icon-512.svg']
 
 self.addEventListener('install', event => event.waitUntil(caches.open(VERSION).then(cache => cache.addAll(SHELL))))

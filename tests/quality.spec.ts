@@ -113,7 +113,7 @@ test('a waiting service worker is told to activate before the app reloads', asyn
     await page.evaluate(() => navigator.serviceWorker.ready)
     await page.reload()
     await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true)
-    await writeFile(workerPath, original.replace("med-handoff-v3", `med-handoff-v3-test-${Date.now()}`))
+    await writeFile(workerPath, original.replace("med-handoff-v4", `med-handoff-v4-test-${Date.now()}`))
     await page.evaluate(async () => { const registration = await navigator.serviceWorker.getRegistration(); await registration?.update() })
     await expect(page.getByRole('button', { name: 'Install update' })).toBeVisible()
     const loaded = page.waitForEvent('load')
