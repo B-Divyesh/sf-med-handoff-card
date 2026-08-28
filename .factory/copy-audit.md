@@ -15,6 +15,17 @@ Audited 2026-08-28 for polish round 2. Counts use whitespace-delimited words. No
 
 The headline names the job in six words. The audience sentence names the situation in fourteen words. The sample action and its one-click result sit together.
 
+## Landing headings and actions
+
+| Copy | Words | Purpose |
+| --- | ---: | --- |
+| Create a medication handoff in three steps | 7 | Names the how-to section. |
+| Add the current medication list | 5 | Names step one. |
+| Mark each dose | 3 | Names step two. |
+| Print, share, or back up the handoff | 7 | Names step three and its results. |
+| Try it with sample data | 5 | Opens the isolated sample. |
+| Add your first medication | 4 | Starts a real record. |
+
 ## Landing page
 
 | Sentence | Words |
@@ -77,3 +88,7 @@ The headline names the job in six words. The audience sentence names the situati
 | Example environment | demo |
 | Saved portable copy | backup |
 | Display preference | view |
+
+## README check
+
+The public README uses outcome language for local storage and encrypted backups. It contains no reader-facing “IndexedDB,” “AES-GCM,” or “key derived” wording. Those implementation names remain only in source and tests where exact behavior is verified.

@@ -1,0 +1,49 @@
+{
+  "checkedAt": "2026-08-28T22:50:07.517Z",
+  "links": [
+    {
+      "href": "https://med-handoff-card.sociobot.in/",
+      "status": 200
+    },
+    {
+      "href": "https://med-handoff-card.sociobot.in/#main",
+      "status": 200
+    },
+    {
+      "href": "https://med-handoff-card.sociobot.in/#tools",
+      "status": 200
+    },
+    {
+      "href": "https://med-handoff-card.sociobot.in/404.html#main",
+      "status": 200
+    },
+    {
+      "href": "https://med-handoff-card.sociobot.in/?demo=1",
+      "status": 200
+    },
+    {
+      "href": "https://med-handoff-card.sociobot.in/demo",
+      "status": 200
+    },
+    {
+      "href": "https://med-handoff-card.sociobot.in/demo#main",
+      "status": 200
+    },
+    {
+      "href": "https://med-handoff-card.sociobot.in/privacy",
+      "status": 200
+    },
+    {
+      "href": "https://med-handoff-card.sociobot.in/privacy#main",
+      "status": 200
+    },
+    {
+      "href": "https://med-handoff-card.sociobot.in/terms",
+      "status": 200
+    },
+    {
+      "href": "https://med-handoff-card.sociobot.in/terms#main",
+      "status": 200
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "checkedAt": "2026-08-28T22:48:32.572Z",
+  "deployment": "033035e8-e751-4936-a751-cc6a6369303e",
+  "files": {
+    "index": {
+      "local": "bb016b1ca7ebf5b2fc39305edb585c1afb3d19135cadb7bacf52dbe705e8e5a0",
+      "live": "bb016b1ca7ebf5b2fc39305edb585c1afb3d19135cadb7bacf52dbe705e8e5a0",
+      "match": true
+    },
+    "/assets/main-wjZV9Sha.js": {
+      "local": "55860adf08c9be746b454175222a23778a00e45ba44d3a61bd3c02edc17159b4",
+      "live": "55860adf08c9be746b454175222a23778a00e45ba44d3a61bd3c02edc17159b4",
+      "match": true,
+      "bytes": 54183
+    },
+    "/assets/main-CXO0BZrb.css": {
+      "local": "5af50378c3cc76fb2c3585fcbd9211225fa93b03400f1c2b602205ec78062b48",
+      "live": "5af50378c3cc76fb2c3585fcbd9211225fa93b03400f1c2b602205ec78062b48",
+      "match": true,
+      "bytes": 14630
+    },
+    "/sw.js": {
+      "local": "7d4f59fa55e3c9376dc68b6a0e70f796385dbe7b4683ea34de7f6a4168f12f45",
+      "live": "7d4f59fa55e3c9376dc68b6a0e70f796385dbe7b4683ea34de7f6a4168f12f45",
+      "match": true,
+      "bytes": 1879
+    },
+    "/manifest.webmanifest": {
+      "local": "6eff8d79899da686f24ab7189ade75b06b908254a2ac993a246f3360cf9a2274",
+      "live": "6eff8d79899da686f24ab7189ade75b06b908254a2ac993a246f3360cf9a2274",
+      "match": true,
+      "bytes": 479
+    }
+  },
+  "routes": {
+    "/": 200,
+    "/demo": 200,
+    "/privacy": 200,
+    "/terms": 200,
+    "/404.html": 200,
+    "/not-a-real-page-polish-2": 404,
+    "/robots.txt": 200,
+    "/sitemap.xml": 200
+  },
+  "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; worker-src 'self'",
+  "referrerPolicy": "no-referrer",
+  "contentTypeOptions": "nosniff"
+}

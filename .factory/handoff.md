@@ -1,34 +1,46 @@
-# Med Handoff Card — review 2 handoff
+# Med Handoff Card — polish round 2 handoff
 
 ## Status
 
-**FAIL — review only.** No product code was modified. The reviewer wrote and
-committed `.factory/review-2.md` with three remaining minor copy findings:
-F-2-1 through F-2-3.
+**PASS.** All 26 cumulative findings in `.factory/review-1.md` and `.factory/review-2.md` are resolved. The repair implementation is commit `159a86e9a3cf8a6e7aefb06cfaa7d8f4f686877e`; final evidence is recorded in `.factory/polish-2.md`.
 
-## What was verified
+## What changed
 
-- Cold live visits at 390 × 844 and 1440 × 900 made the job, audience, and
-  first sample action clear without scrolling.
-- The one-click live demo immediately showed realistic sample data. Reset
-  restored it, demo changes did not create an IndexedDB record, Start for real
-  did not carry sample changes into the real board, and observed requests were
-  same-origin only.
-- Every command in `.factory/claims.json` was run separately in a fresh clone
-  after `npm ci`: all 17 claim tests passed.
-- The fresh clone also passed `npm test` (3 unit tests and 28 Chromium tests)
-  and `npm run build`.
-- Live route/metadata/404/back-button/focus checks, request logging, offline
-  demo reload, mobile overflow, console checks, and live axe checks passed.
-- All 23 findings from review 1 were independently checked as fixed; the
-  detailed closure table is in `.factory/review-2.md`.
+- Replaced the vague third instruction with a direct print/share/backup action and a concrete explanation of when to use each option.
+- Changed the semantic how-to heading to “Create a medication handoff in three steps.”
+- Removed reader-facing IndexedDB, AES-GCM, and key-derivation jargon from the README.
+- Added a browser regression test for the new heading and third-step copy.
+- Updated the build label, copy audit, and the verb-first 68-character catalog description.
+- Preserved the dithered bedside print visual system and the static offline PWA deployment class.
 
-## Remaining work
+## Verification
 
-1. Replace the vague “Hand it over.” instruction with a concrete action.
-2. Make the semantic How it works `h2` name the three-step section.
-3. Remove or rewrite the public README’s IndexedDB/AES-GCM implementation
-   jargon in plain language.
+From a clean clone of the implementation commit:
 
-After those edits, rerun the complete review checklist rather than a
-diff-only check.
+```sh
+npm ci
+npm run test:type
+npm run lint
+npm run build
+npm test
+```
+
+All passed. The full suite contains 3 unit tests and 29 Chromium tests. Every one of the 17 commands in `.factory/claims.json` was also run separately and passed. Per-claim logs are in `.factory/qa-evidence/polish-2/clean-clone/`.
+
+The production build contains 54.18 KB JavaScript raw / 20.00 KB gzip, 14.63 KB CSS raw / 4.13 KB gzip, and a 170.45 KB hero image. Local Lighthouse scored 99 performance, 100 accessibility, 100 best practices, and 100 SEO, with 2.1 s LCP, 0 ms TBT, and zero CLS.
+
+Deployment `033035e8-e751-4936-a751-cc6a6369303e` succeeded at <https://med-handoff-card.sociobot.in>. A cold post-deploy pass verified:
+
+- clear first-screen job, audience, sample action, result, and three facts;
+- one-click `/?demo=1` entry, persistent banner, realistic sample, reset, blank real record after exit, and no demo write to the real IndexedDB record;
+- all route titles, descriptions, canonicals, social fields, icons, shared chrome, legal links, focus announcements, Back/Forward focus, and HTTP 404 behavior;
+- complete readable QR data, confirmed record deletion, offline demo reload, and same-origin-only requests;
+- 390 px layout at 200% text, 44 px minimum targets, no horizontal overflow, no console errors, and zero serious/critical axe findings in light and dark views.
+
+The live URL verifier passed. Live Lighthouse scored 100 in performance, accessibility, best practices, and SEO, with 1.8 s LCP, 0 ms TBT, and zero CLS. The live index, JavaScript, CSS, service worker, and manifest hashes match `dist/`; see `.factory/qa-evidence/polish-2/live/http-identity.json`.
+
+The live link crawl found 11 internal links and hash destinations; every one returned HTTP 200.
+
+## Known gaps and next steps
+
+None. `.factory/brief.json` is absent from the repository; the available design, review, polish, demo, claim, verification, and handoff records were used as the product contract.

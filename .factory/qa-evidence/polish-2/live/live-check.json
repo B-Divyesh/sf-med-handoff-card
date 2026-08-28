@@ -1,0 +1,172 @@
+{
+  "cold": {
+    "headline": "Track medication handoffs between family caregivers.",
+    "audience": "For adult children and home caregivers who need a clear record when care changes hands.",
+    "action": "Try it with sample data",
+    "actionResult": "Open a filled sample handoff in one click.",
+    "actionBottom": 459.890625,
+    "facts": [
+      "Medication records stay in this browser.",
+      "The board works offline after your first visit.",
+      "Printing, QR handoffs, and exports are free."
+    ],
+    "howHeading": "Create a medication handoff in three steps",
+    "thirdStep": {
+      "action": "Print, share, or back up the handoff.",
+      "explanation": "Print for the next caregiver, show the QR code in person, or save a backup for yourself."
+    },
+    "build": "2026.08.28-polish.2"
+  },
+  "demo": {
+    "entry": {
+      "banner": "Demo — sample data, nothing is saved to your real record\nDose changes in this demo do not change your real record.\nReset demo\nStart for real",
+      "person": "Nora Ellis",
+      "medications": 3,
+      "shiftNote": "Nora ate breakfast. The evening Metformin dose still needs confirmation.",
+      "states": [
+        "Taken",
+        "Held",
+        "Taken",
+        "Unknown"
+      ]
+    },
+    "realRecordAfterEdit": null,
+    "realAfterExit": {
+      "url": "https://med-handoff-card.sociobot.in/",
+      "sampleCount": 0,
+      "empty": true
+    },
+    "qr": {
+      "medications": [
+        "Metformin",
+        "Lisinopril",
+        "Vitamin D3"
+      ],
+      "states": [
+        "taken",
+        "held",
+        "taken"
+      ]
+    }
+  },
+  "routes": {
+    "home": {
+      "title": "Med Handoff Card — caregiver medication handoffs",
+      "description": "Track scheduled doses and leave a clear medication handoff for the next family caregiver.",
+      "canonical": "https://med-handoff-card.sociobot.in/",
+      "ogTitle": "Med Handoff Card — caregiver medication handoffs",
+      "twitterTitle": "Med Handoff Card — caregiver medication handoffs",
+      "apple": "/icons/apple-touch-icon.png",
+      "h1": "Track medication handoffs between family caregivers.",
+      "h1Count": 1,
+      "nav": [
+        "Board",
+        "Demo",
+        "Tools",
+        "Privacy"
+      ],
+      "footer": "Track medication handoffs between family caregivers.Privacy TermsBuilt by Param Factory · version 2026.08.28-polish.2 · Original artwork was generated for Med Handoff Card. The app loads no analytics or code from other sites.",
+      "theme": "◐ Use night view"
+    },
+    "privacy": {
+      "title": "Privacy — Med Handoff Card",
+      "description": "Learn what Med Handoff Card stores in your browser and how to delete your local medication record.",
+      "canonical": "https://med-handoff-card.sociobot.in/privacy",
+      "ogTitle": "Privacy — Med Handoff Card",
+      "twitterTitle": "Privacy — Med Handoff Card",
+      "apple": "/icons/apple-touch-icon.png",
+      "h1": "Privacy",
+      "h1Count": 1,
+      "nav": [
+        "Board",
+        "Demo",
+        "Tools",
+        "Privacy"
+      ],
+      "footer": "Track medication handoffs between family caregivers.Privacy TermsBuilt by Param Factory · version 2026.08.28-polish.2 · Original artwork was generated for Med Handoff Card. The app loads no analytics or code from other sites.",
+      "theme": "◐ Use night view",
+      "focused": true,
+      "announced": "Privacy — Med Handoff Card loaded"
+    },
+    "backFocused": true,
+    "forwardFocused": true,
+    "terms": {
+      "title": "Terms of use — Med Handoff Card",
+      "description": "Read the terms for using Med Handoff Card as a personal caregiver medication record.",
+      "canonical": "https://med-handoff-card.sociobot.in/terms",
+      "ogTitle": "Terms of use — Med Handoff Card",
+      "twitterTitle": "Terms of use — Med Handoff Card",
+      "apple": "/icons/apple-touch-icon.png",
+      "h1": "Terms of use",
+      "h1Count": 1,
+      "nav": [
+        "Board",
+        "Demo",
+        "Tools",
+        "Privacy"
+      ],
+      "footer": "Track medication handoffs between family caregivers.Privacy TermsBuilt by Param Factory · version 2026.08.28-polish.2 · Original artwork was generated for Med Handoff Card. The app loads no analytics or code from other sites.",
+      "theme": "◐ Use night view"
+    },
+    "notFound": {
+      "title": "Page not found — Med Handoff Card",
+      "description": "The requested Med Handoff Card page could not be found.",
+      "canonical": "https://med-handoff-card.sociobot.in/404.html",
+      "ogTitle": "Page not found — Med Handoff Card",
+      "twitterTitle": "Page not found — Med Handoff Card",
+      "apple": "/icons/apple-touch-icon.png",
+      "h1": "Page not found.",
+      "h1Count": 1,
+      "nav": [
+        "Board",
+        "Demo",
+        "Tools",
+        "Privacy"
+      ],
+      "footer": "Track medication handoffs between family caregivers.Privacy TermsBuilt by Param Factory · version 2026.08.28-polish.2 · Original artwork was generated for Med Handoff Card. The app loads no analytics or code from other sites.",
+      "theme": "◐ Use night view",
+      "status": 404
+    },
+    "demo": {
+      "title": "Demo — Med Handoff Card",
+      "description": "Try an isolated sample medication handoff for Nora Ellis without changing your real record.",
+      "canonical": "https://med-handoff-card.sociobot.in/demo",
+      "ogTitle": "Demo — Med Handoff Card",
+      "twitterTitle": "Demo — Med Handoff Card",
+      "apple": "/icons/apple-touch-icon.png",
+      "h1": "Today’s handoff",
+      "h1Count": 1,
+      "nav": [
+        "Board",
+        "Demo",
+        "Tools",
+        "Privacy"
+      ],
+      "footer": "Track medication handoffs between family caregivers.Privacy TermsBuilt by Param Factory · version 2026.08.28-polish.2 · Original artwork was generated for Med Handoff Card. The app loads no analytics or code from other sites.",
+      "theme": "◐ Use night view"
+    }
+  },
+  "accessibility": {
+    "light": 0,
+    "dark": 0
+  },
+  "mobile": {
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "navVisible": true,
+    "minTarget": 44
+  },
+  "offline": {
+    "controlled": true,
+    "sample": true,
+    "status": "OFFLINE · CHANGES SAVE ON THIS DEVICE"
+  },
+  "privacy": {
+    "deletion": {
+      "empty": true,
+      "removed": true
+    }
+  },
+  "errors": [],
+  "externalRequests": []
+}
