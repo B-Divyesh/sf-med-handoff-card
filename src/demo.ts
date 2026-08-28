@@ -13,6 +13,7 @@ export function sampleData(): AppData {
     shiftNote: 'Nora ate breakfast. The evening Metformin dose still needs confirmation.',
     medications,
     logs: [],
+    regimenChanges: [],
     updatedAt: now
   }
   data = updateDose(data, 'demo-metformin', 'Morning', 'taken', 'Taken with breakfast', localDate())

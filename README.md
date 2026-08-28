@@ -10,6 +10,7 @@ The app records each dose as **Taken**, **Held**, or **Unknown**. It is a caregi
 
 - Keeps a current medication list with amounts, directions, and times.
 - Records a dose state and optional caregiver note.
+- Records a regimen change with the prior and new amount and schedule.
 - Prints a handoff and creates a local QR handoff.
 - Works offline after the first visit.
 - Stores the real record in IndexedDB in your browser.

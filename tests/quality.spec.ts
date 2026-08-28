@@ -20,6 +20,13 @@ test('desktop and mobile have one heading, no console errors, and no serious axe
   }
 })
 
+test('dark mode has no serious axe findings', async ({ page }) => {
+  await page.goto('/demo')
+  await page.getByRole('button', { name: 'Switch to dark appearance' }).click()
+  const results = await new AxeBuilder({ page }).analyze()
+  expect(results.violations.filter(item => item.impact === 'serious' || item.impact === 'critical')).toEqual([])
+})
+
 test('390px interactive targets are at least 44 by 44 CSS pixels', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/demo')
@@ -45,6 +52,39 @@ test('keyboard opens the medication dialog, focuses its label, and announces err
   await expect(page.locator('.form-error')).toHaveAttribute('aria-live', 'assertive')
 })
 
+test('invalid backup, blank required fields, dialog naming, and focus recovery are safe', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Add your first medication' }).click()
+  await expect(page.getByRole('dialog')).toHaveAccessibleName('Add medication')
+  await page.getByLabel('Medication name').fill('   ')
+  await page.getByLabel('Dose / amount').fill('   ')
+  await page.getByLabel('Morning').check()
+  await page.getByRole('button', { name: 'Save medication' }).click()
+  await expect(page.locator('.form-error')).toHaveText('Enter a medication name and dose or amount.')
+  expect(await page.getByRole('dialog').evaluate(dialog => dialog.open)).toBe(true)
+  await page.keyboard.press('Escape')
+
+  await page.locator('#import-file').setInputFiles({ name: 'broken.json', mimeType: 'application/json', buffer: Buffer.from('{"personName":"QA","shiftNote":"","medications":[{"active":true}],"logs":[]}' ) })
+  await expect(page.locator('.toast')).toContainText('Could not import that backup')
+  await expect(page.getByRole('heading', { name: 'Track medicine handoffs between family caregivers.' })).toBeVisible()
+
+  await page.getByRole('button', { name: 'Add your first medication' }).click()
+  await page.getByLabel('Medication name').fill('Focus medicine')
+  await page.getByLabel('Dose / amount').fill('5 mg')
+  await page.getByLabel('Morning').check()
+  await page.getByRole('button', { name: 'Save medication' }).click()
+  await expect(page.getByRole('heading', { name: 'Today’s handoff' })).toBeFocused()
+})
+
+test('demo appearance preference stays in the demo storage namespace', async ({ page }) => {
+  await page.goto('/demo')
+  await page.getByRole('button', { name: 'Switch to dark appearance' }).click()
+  expect(await page.evaluate(() => localStorage.getItem('demo:mhc_theme'))).toBe('dark')
+  expect(await page.evaluate(() => localStorage.getItem('mhc_theme'))).toBeNull()
+  await page.getByRole('button', { name: 'Start for real' }).click()
+  expect(await page.evaluate(() => localStorage.getItem('mhc_theme'))).toBeNull()
+})
+
 test('static response policy declares CSP, immutable assets, manifest MIME, and a 404', async ({ request }) => {
   const config = JSON.parse(await readFile('public/staticwebapp.config.json', 'utf8'))
   expect(config.globalHeaders['Content-Security-Policy']).toContain("default-src 'self'")
@@ -56,6 +96,13 @@ test('static response policy declares CSP, immutable assets, manifest MIME, and 
   await expect((await request.get('/robots.txt')).status()).toBe(200)
   await expect((await request.get('/sitemap.xml')).status()).toBe(200)
   await expect((await request.get('/404.html')).status()).toBe(200)
+  for (const path of ['/privacy/', '/terms/', '/404.html']) {
+    const response = await request.get(path)
+    const document = await response.text()
+    expect(document).toContain('<header')
+    expect(document).toContain('<footer')
+    expect(document).toContain('Built by Param Factory')
+  }
 })
 
 test('a waiting service worker is told to activate before the app reloads', async ({ page }) => {
@@ -66,7 +113,7 @@ test('a waiting service worker is told to activate before the app reloads', asyn
     await page.evaluate(() => navigator.serviceWorker.ready)
     await page.reload()
     await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true)
-    await writeFile(workerPath, original.replace("med-handoff-v2", `med-handoff-v2-test-${Date.now()}`))
+    await writeFile(workerPath, original.replace("med-handoff-v3", `med-handoff-v3-test-${Date.now()}`))
     await page.evaluate(async () => { const registration = await navigator.serviceWorker.getRegistration(); await registration?.update() })
     await expect(page.getByRole('button', { name: 'Install update' })).toBeVisible()
     const loaded = page.waitForEvent('load')

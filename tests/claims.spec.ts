@@ -1,5 +1,6 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 import { readFile } from 'node:fs/promises'
+import jsQR from 'jsqr'
 
 test('@claim:demo-isolation sample changes never enter the real record', async ({ page }) => {
   await page.goto('/')
@@ -33,6 +34,9 @@ test('@claim:offline-reload demo reloads after the connection is removed', async
   await page.evaluate(() => navigator.serviceWorker.ready)
   await page.reload()
   await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true)
+  await page.goto('/privacy')
+  await expect(page.getByRole('heading', { name: 'Privacy, plainly.' })).toBeVisible()
+  await page.goto('/demo?after-privacy=1')
   await context.setOffline(true)
   await page.reload()
   await expect(page.getByRole('heading', { name: 'Today’s handoff' })).toBeVisible()
@@ -84,10 +88,25 @@ test('@claim:encrypted-backup creates an AES-GCM passphrase backup locally', asy
   await expect(page.locator('.toast')).toContainText('Could not import that backup')
 })
 
-test('@claim:qr-handoff creates the handoff QR in the browser', async ({ page }) => {
+test('@claim:qr-handoff creates an interpretable handoff QR in the browser', async ({ page }) => {
   await page.goto('/demo')
   await page.getByRole('button', { name: 'Show QR handoff' }).click()
-  await expect(page.getByAltText('QR code containing today’s medication handoff data.')).toHaveAttribute('src', /^data:image\/png/)
+  const qr = page.getByAltText('QR code containing today’s medication handoff data.')
+  await expect(qr).toHaveAttribute('src', /^data:image\/png/)
+  const image = await qr.evaluate(async element => {
+    const source = element as HTMLImageElement
+    await source.decode()
+    const canvas = document.createElement('canvas')
+    canvas.width = source.naturalWidth
+    canvas.height = source.naturalHeight
+    canvas.getContext('2d')!.drawImage(source, 0, 0)
+    return { width: canvas.width, height: canvas.height, pixels: Array.from(canvas.getContext('2d')!.getImageData(0, 0, canvas.width, canvas.height).data) }
+  })
+  const decoded = jsQR(new Uint8ClampedArray(image.pixels), image.width, image.height)
+  expect(decoded?.data).toBeTruthy()
+  const payload = JSON.parse(decoded!.data) as { version: number, regimen: Array<{ medicationId: string }>, doses: Array<{ medicationId: string }> }
+  expect(payload.version).toBe(2)
+  expect(payload.doses.every(dose => payload.regimen.some(medication => medication.medicationId === dose.medicationId))).toBe(true)
   await page.getByRole('button', { name: 'Hide QR code' }).click()
   await expect(page.getByAltText('QR code containing today’s medication handoff data.')).toHaveCount(0)
 })
@@ -108,4 +127,51 @@ test('@claim:free-tools exposes every handoff tool without a checkout', async ({
   await expect(page.getByRole('button', { name: 'Show QR handoff' })).toBeEnabled()
   await expect(page.getByRole('button', { name: 'Export backup' })).toBeEnabled()
   await expect(page.locator('a[href*="checkout"]')).toHaveCount(0)
+})
+
+async function addMedication(page: Page, name = 'Test medicine') {
+  await page.getByRole('button', { name: /Add (your first )?medication/ }).click()
+  await page.getByLabel('Medication name').fill(name)
+  await page.getByLabel('Dose / amount').fill('5 mg')
+  await page.getByLabel('Directions').fill('with breakfast')
+  await page.getByLabel('Morning').check()
+  await page.getByRole('button', { name: 'Save medication' }).click()
+}
+
+test('@claim:current-medication-list retains complete regimen details after reload', async ({ page }) => {
+  await page.goto('/')
+  await addMedication(page, 'Current list medicine')
+  await page.reload()
+  await expect(page.getByText('Current list medicine').first()).toBeVisible()
+  await expect(page.getByText('5 mg · Morning')).toBeVisible()
+  await expect(page.getByText('with breakfast', { exact: true })).toBeVisible()
+})
+
+test('@claim:dose-state-notes retains a held dose and caregiver note after reload', async ({ page }) => {
+  await page.goto('/')
+  await addMedication(page, 'Held medicine')
+  page.once('dialog', dialog => dialog.accept('Asked the pharmacist to confirm'))
+  await page.locator('[data-action="dose"][data-state="held"]').click()
+  await page.reload()
+  await expect(page.getByRole('button', { name: 'Held' })).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.getByText('“Asked the pharmacist to confirm”', { exact: true })).toBeVisible()
+})
+
+test('@claim:real-record-retention keeps a saved real medication after reload', async ({ page }) => {
+  await page.goto('/')
+  await addMedication(page, 'Persistent medicine')
+  await page.reload()
+  await expect(page.getByText('Persistent medicine').first()).toBeVisible()
+})
+
+test('@claim:regimen-history records the prior and new regimen', async ({ page }) => {
+  await page.goto('/')
+  await addMedication(page, 'Changing medicine')
+  await page.getByRole('button', { name: 'Edit' }).click()
+  await page.getByLabel('Dose / amount').fill('10 mg')
+  await page.getByRole('checkbox', { name: 'Morning' }).uncheck()
+  await page.getByRole('checkbox', { name: 'Evening' }).check()
+  await page.getByRole('button', { name: 'Save medication' }).click()
+  await expect(page.getByText('Regimen changed')).toBeVisible()
+  await expect(page.getByText('Was 5 mg · Morning. Now 10 mg · Evening.')).toBeVisible()
 })

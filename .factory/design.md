@@ -60,3 +60,7 @@ on 2026-08-28 using `/opt/fleet/lib/gen-image.sh`. Prompt and a JSON sidecar
 are stored next to the asset. The source image is original product artwork,
 used decoratively with disclosure in the footer. It is optimized to WebP and
 must remain under 300 KB.
+
+Social preview: `public/social-card.svg` is a hand-authored 1200 × 630 vector
+composition using the same paper, cobalt, marigold, and pill-tray motifs. It is
+original product artwork and contains no third-party material.

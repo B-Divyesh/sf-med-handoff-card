@@ -21,13 +21,23 @@ export interface DoseLog {
   updatedAt: string
 }
 
+export interface RegimenChange {
+  id: string
+  medicationId: string
+  medicationName: string
+  previous: Pick<Medication, 'dose' | 'instructions' | 'slots' | 'active'>
+  next: Pick<Medication, 'dose' | 'instructions' | 'slots' | 'active'>
+  changedAt: string
+}
+
 export interface AppData {
   personName: string
   shiftNote: string
   medications: Medication[]
   logs: DoseLog[]
+  regimenChanges: RegimenChange[]
   updatedAt: string
 }
 
 export const slots: Slot[] = ['Morning', 'Noon', 'Evening', 'Bedtime']
-export const blankData = (): AppData => ({ personName: '', shiftNote: '', medications: [], logs: [], updatedAt: new Date().toISOString() })
+export const blankData = (): AppData => ({ personName: '', shiftNote: '', medications: [], logs: [], regimenChanges: [], updatedAt: new Date().toISOString() })

@@ -1,5 +1,6 @@
 import type { AppData } from './types'
 import { blankData } from './types'
+import { normalizeAppData } from './logic'
 
 export const REAL_DB = 'med-handoff-card'
 const STORE = 'records'
@@ -13,7 +14,12 @@ export async function loadData(): Promise<AppData> {
     request.onsuccess = () => {
       const tx = request.result.transaction(STORE, 'readonly')
       const get = tx.objectStore(STORE).get(KEY)
-      get.onsuccess = () => resolve(get.result ?? blankData())
+      get.onsuccess = () => {
+        if (!get.result) { resolve(blankData()); return }
+        const stored = normalizeAppData(get.result)
+        if (stored) resolve(stored)
+        else reject(new Error('The saved record has an unsupported format.'))
+      }
       get.onerror = () => reject(get.error)
     }
   })

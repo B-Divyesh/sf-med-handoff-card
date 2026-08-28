@@ -1,4 +1,4 @@
-const VERSION = 'med-handoff-v2'
+const VERSION = 'med-handoff-v3'
 const SHELL = ['/', '/demo', '/index.html', '/manifest.webmanifest', '/offline.html', '/404.html', '/privacy/index.html', '/terms/index.html', '/icons/icon-192.svg', '/icons/icon-512.svg']
 
 self.addEventListener('install', event => event.waitUntil(caches.open(VERSION).then(cache => cache.addAll(SHELL))))
@@ -8,7 +8,10 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url)
   if (url.origin !== location.origin) return
   if (event.request.mode === 'navigate') {
-    event.respondWith(fetch(event.request).then(response => { if (response.ok) { const copy = response.clone(); caches.open(VERSION).then(cache => cache.put('/index.html', copy)) } return response }).catch(() => caches.match('/index.html').then(hit => hit || caches.match('/offline.html'))))
+    // A navigation may be the legal pages. Never let it overwrite the
+    // precached board shell; only board URLs use that shell while offline.
+    const isBoardRoute = url.pathname === '/' || url.pathname === '/demo'
+    event.respondWith(fetch(event.request).catch(() => isBoardRoute ? caches.match('/index.html') : caches.match('/offline.html')))
     return
   }
   event.respondWith(caches.open(VERSION).then(cache => cache.match(new URL(event.request.url).pathname)).then(hit => hit || fetch(event.request).then(response => { if (response.ok) caches.open(VERSION).then(cache => cache.put(new URL(event.request.url).pathname, response.clone())); return response })))

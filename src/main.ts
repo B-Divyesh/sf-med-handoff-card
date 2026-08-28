@@ -2,14 +2,13 @@ import QRCode from 'qrcode'
 import './style.css'
 import handoffTray from './assets/handoff-tray.webp'
 import { sampleData } from './demo'
-import { csv, decryptExport, dueMeds, encryptExport, handoffPayload, localDate, updateDose } from './logic'
+import { csv, decryptExport, dueMeds, encryptExport, handoffPayload, localDate, normalizeAppData, updateDose } from './logic'
 import { loadData, saveData } from './store'
 import { blankData, slots, type AppData, type DoseState, type Medication, type Slot } from './types'
 
 const app = document.querySelector<HTMLDivElement>('#app')!
 let data: AppData = blankData()
 let online = navigator.onLine
-let theme = localStorage.getItem('mhc_theme') || 'light'
 let message = ''
 let qr = ''
 let selectedDate = localDate()
@@ -23,30 +22,40 @@ const stateMark: Record<DoseState, string> = { taken: '✓', held: 'Ⅱ', unknow
 function currentPath() { return location.pathname.replace(/\/$/, '') || '/' }
 const initialParams = new URLSearchParams(location.search)
 const demoMode = currentPath() === '/demo' || initialParams.get('demo') === '1'
+const themeKey = demoMode ? 'demo:mhc_theme' : 'mhc_theme'
+let theme = localStorage.getItem(themeKey) || 'light'
+let focusAfterRender = ''
 
-function save(next = data) {
+async function save(next = data) {
   data = next
   if (demoMode) { message = 'Demo updated. Your real record was not changed.'; render(); return }
-  saveData(data).then(() => { message = 'Saved on this device.'; render() }).catch(() => { message = 'Could not save locally. Check available device storage.'; render() })
+  try {
+    await saveData(data)
+    if (!message) message = 'Saved on this device.'
+    render()
+  } catch {
+    message = 'Could not save locally. Check available device storage.'
+    render()
+  }
 }
 
 function empty(): boolean { return data.medications.filter(m => m.active).length === 0 }
 
 function htmlShell(content: string) {
-  const demoBanner = demoMode ? `<aside class="demo-banner" aria-label="Demo mode"><strong>Demo — sample data, nothing is saved</strong><span>Try every control without changing your real record.</span><div><button class="banner-button" data-action="reset-demo">Reset demo</button><button class="banner-button" data-action="start-real">Start for real</button></div></aside>` : ''
-  return `${demoBanner}<header class="masthead"><a class="brand" href="/" aria-label="Med Handoff Card home"><span class="brand-mark">MH</span><span>Med Handoff<br>Card</span></a><nav aria-label="Primary"><a href="/" ${currentPath() === '/' && !demoMode ? 'aria-current="page"' : ''}>Board</a><a href="/demo" ${demoMode ? 'aria-current="page"' : ''}>Demo</a><a href="#tools">Tools</a></nav><button class="theme" type="button" data-action="theme" aria-label="Switch to ${theme === 'dark' ? 'light' : 'dark'} appearance">${theme === 'dark' ? '☼' : '◐'} <span>${theme === 'dark' ? 'Light' : 'Night'}</span></button></header><main id="main">${content}</main><footer><span>Medication records stay in this browser.</span><span><a href="/privacy">Privacy</a> <a href="/terms">Terms</a></span><small>Original artwork was generated for Med Handoff Card. The app uses no analytics or third-party runtime scripts.</small></footer><div class="route-status sr-only" aria-live="polite"></div><div class="toast" aria-live="polite">${updateReady ? 'An update is ready. ' : ''}${message}${updateReady ? ' <button data-action="update">Install update</button>' : ''}</div>`
+  const demoBanner = demoMode ? `<aside class="demo-banner" aria-label="Demo mode"><strong>Demo — sample data, nothing is saved to your real record</strong><span>Try every control without changing your real record.</span><div><button class="banner-button" data-action="reset-demo">Reset demo</button><button class="banner-button" data-action="start-real">Start for real</button></div></aside>` : ''
+  return `${demoBanner}<header class="masthead"><a class="brand" href="/" aria-label="Med Handoff Card home"><span class="brand-mark">MH</span><span>Med Handoff<br>Card</span></a><nav aria-label="Primary"><a href="/" ${currentPath() === '/' && !demoMode ? 'aria-current="page"' : ''}>Board</a><a href="/demo" ${demoMode ? 'aria-current="page"' : ''}>Demo</a><a href="#tools">Tools</a><a href="/privacy" ${currentPath() === '/privacy' ? 'aria-current="page"' : ''}>Privacy</a></nav><button class="theme" type="button" data-action="theme" aria-label="Switch to ${theme === 'dark' ? 'light' : 'dark'} appearance">${theme === 'dark' ? '☼' : '◐'} <span>${theme === 'dark' ? 'Light' : 'Night'}</span></button></header><main id="main">${content}</main><footer><span>Medication records stay in this browser.</span><span><a href="/privacy">Privacy</a> <a href="/terms">Terms</a></span><small>Built by Param Factory · version 2026.08.28-repair.1 · Original artwork was generated for Med Handoff Card. The app uses no analytics or third-party runtime scripts.</small></footer><div class="route-status sr-only" aria-live="polite"></div><div class="toast" aria-live="polite">${updateReady ? 'An update is ready. ' : ''}${message}${updateReady ? ' <button data-action="update">Install update</button>' : ''}</div>`
 }
 
 function board() {
   if (empty()) return emptyBoard()
-  return `<section class="intro"><div><p class="eyebrow">${online ? 'Local handoff · ready offline' : 'Offline · changes save on this device'}</p><h1>Today’s handoff</h1><p class="recipient">For <button class="text-button" data-action="person">${esc(data.personName || 'Care recipient')}</button></p><p class="intro-copy">Record the dose state first. Leave the detail clear enough for the next caregiver.</p></div><div class="date-stamp"><label for="date">Handoff date</label><input id="date" type="date" value="${selectedDate}"></div></section>
+  return `<section class="intro"><div><p class="eyebrow">${online ? 'Local handoff · ready offline' : 'Offline · changes save on this device'}</p><h1 tabindex="-1">Today’s handoff</h1><p class="recipient">For <button class="text-button" data-action="person">${esc(data.personName || 'Care recipient')}</button></p><p class="intro-copy">Record the dose state first. Leave the detail clear enough for the next caregiver.</p></div><div class="date-stamp"><label for="date">Handoff date</label><input id="date" type="date" value="${selectedDate}"></div></section>
     <section class="shift-note" aria-labelledby="shift-heading"><div><p class="eyebrow">Shift note</p><h2 id="shift-heading">What should the next person know?</h2></div><textarea id="shift-note" maxlength="500" placeholder="Example: New blood pressure medicine started today; hold only if prescriber said so.">${esc(data.shiftNote)}</textarea><p class="quiet">This is a caregiver record, not medical advice. Confirm unclear instructions with the prescriber or pharmacist.</p></section>
     <section aria-labelledby="dose-heading"><div class="section-heading"><div><p class="eyebrow">Dose board</p><h2 id="dose-heading">Mark each scheduled dose</h2></div><p class="quiet">${data.medications.filter(m => m.active).length} current medicine${data.medications.filter(m => m.active).length === 1 ? '' : 's'}</p></div><div class="dose-grid">${slots.map(slotBoard).join('')}</div></section>
     ${regimen()} ${tools()} ${historySection()}`
 }
 
 function emptyBoard() {
-  return `<section class="empty-state"><div><p class="eyebrow">Private caregiver record</p><h1>Track medicine handoffs between family caregivers.</h1><p>For adult children and home caregivers who need a clear record when care changes hands.</p><div class="first-actions"><a class="primary link-button" href="/demo">Try it with sample data</a><span>See a filled handoff board in one click.</span></div><button class="outline" data-action="add-med">Add your first medication</button><ul class="plain-facts"><li>Medication records stay in this browser.</li><li>The board works offline after your first visit.</li><li>Printing, QR handoffs, and exports are free.</li></ul></div><img src="${handoffTray}" width="900" height="900" alt="Dithered illustration of a pill organizer, blank handoff card, and pencil." fetchpriority="high" decoding="async"></section>${howItWorks()}${tools()}`
+  return `<section class="empty-state"><div><p class="eyebrow">Private caregiver record</p><h1 tabindex="-1">Track medicine handoffs between family caregivers.</h1><p>For adult children and home caregivers who need a clear record when care changes hands.</p><div class="first-actions"><a class="primary link-button" href="/demo">Try it with sample data</a><span>See a filled handoff board in one click.</span></div><button class="outline" data-action="add-med">Add your first medication</button><ul class="plain-facts"><li>Medication records stay in this browser.</li><li>The board works offline after your first visit.</li><li>Printing, QR handoffs, and exports are free.</li></ul></div><img src="${handoffTray}" width="900" height="900" alt="Dithered illustration of a pill organizer, blank handoff card, and pencil." fetchpriority="high" decoding="async"></section>${howItWorks()}${tools()}`
 }
 
 function howItWorks() {
@@ -74,8 +83,11 @@ function tools() {
 }
 
 function historySection() {
-  const events = data.logs.filter(log => log.date === selectedDate).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, 8)
-  return `<section class="history" aria-labelledby="history-heading"><p class="eyebrow">Change record</p><h2 id="history-heading">Today’s updates</h2>${events.length ? `<ol>${events.map(log => { const med = data.medications.find(m => m.id === log.medicationId); return `<li><b class="mini-state ${log.state}">${stateMark[log.state]} ${stateLabel[log.state]}</b> ${esc(med?.name ?? 'Removed medication')} · ${log.slot} <time datetime="${log.updatedAt}">${new Date(log.updatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</time>${log.note ? `<span>“${esc(log.note)}”</span>` : ''}</li>` }).join('')}</ol>` : '<p class="quiet">No dose states recorded yet. Unknown is a valid state until you can confirm what happened.</p>'}</section>`
+  const events = [
+    ...data.logs.filter(log => log.date === selectedDate).map(log => ({ at: log.updatedAt, html: (() => { const med = data.medications.find(m => m.id === log.medicationId); return `<li><b class="mini-state ${log.state}">${stateMark[log.state]} ${stateLabel[log.state]}</b> ${esc(med?.name ?? 'Removed medication')} · ${log.slot} <time datetime="${log.updatedAt}">${new Date(log.updatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</time>${log.note ? `<span>“${esc(log.note)}”</span>` : ''}</li>` })() })),
+    ...data.regimenChanges.map(change => ({ at: change.changedAt, html: `<li class="regimen-change"><b>Regimen changed</b> ${esc(change.medicationName)} <time datetime="${change.changedAt}">${new Date(change.changedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</time><span>Was ${esc(change.previous.dose)} · ${esc(change.previous.slots.join(', '))}. Now ${esc(change.next.dose)} · ${esc(change.next.slots.join(', '))}.</span></li>` }))
+  ].sort((a, b) => b.at.localeCompare(a.at)).slice(0, 8)
+  return `<section class="history" aria-labelledby="history-heading"><p class="eyebrow">Change record</p><h2 id="history-heading">Today’s updates</h2>${events.length ? `<ol>${events.map(event => event.html).join('')}</ol>` : '<p class="quiet">No dose states recorded yet. Unknown is a valid state until you can confirm what happened.</p>'}</section>`
 }
 
 function legal(kind: 'privacy' | 'terms') {
@@ -95,25 +107,34 @@ function render() {
   document.title = path === '/privacy' ? 'Privacy — Med Handoff Card' : path === '/terms' ? 'Terms — Med Handoff Card' : demoMode ? 'Demo — Med Handoff Card' : boardPath ? 'Med Handoff Card — track caregiver dose handoffs' : 'Page not found — Med Handoff Card'
   document.querySelector<HTMLLinkElement>('link[rel="canonical"]')!.href = `https://med-handoff-card.sociobot.in${path === '/' ? '/' : path}`
   app.innerHTML = htmlShell(path === '/privacy' ? legal('privacy') : path === '/terms' ? legal('terms') : boardPath ? board() : notFound())
+  if (focusAfterRender) { const target = app.querySelector<HTMLElement>(focusAfterRender); focusAfterRender = ''; queueMicrotask(() => target?.focus()) }
 }
 
 function openMedication(med?: Medication) {
   const existing = med
   const dialog = document.createElement('dialog')
   dialog.className = 'dialog'
-  dialog.innerHTML = `<form method="dialog" id="med-form"><header><p class="eyebrow">Current regimen</p><h2>${existing ? 'Edit medication' : 'Add medication'}</h2></header><label>Medication name<input name="name" required maxlength="80" value="${esc(existing?.name ?? '')}" autocomplete="off"></label><label>Dose / amount<input name="dose" required maxlength="80" value="${esc(existing?.dose ?? '')}" placeholder="Example: 10 mg"></label><label>Directions <span class="optional">optional</span><input name="instructions" maxlength="160" value="${esc(existing?.instructions ?? '')}" placeholder="Example: with breakfast"></label><fieldset><legend>Scheduled time of day</legend>${slots.map(slot => `<label class="check"><input type="checkbox" name="slots" value="${slot}" ${existing?.slots.includes(slot) ? 'checked' : ''}> ${slot}</label>`).join('')}</fieldset><p class="form-error" aria-live="assertive"></p><footer><button class="outline" value="cancel">Cancel</button><button class="primary" value="save">Save medication</button></footer></form>`
+  dialog.setAttribute('aria-labelledby', 'med-dialog-title')
+  dialog.innerHTML = `<form method="dialog" id="med-form" aria-labelledby="med-dialog-title"><header><p class="eyebrow">Current regimen</p><h2 id="med-dialog-title">${existing ? 'Edit medication' : 'Add medication'}</h2></header><label>Medication name<input name="name" required maxlength="80" value="${esc(existing?.name ?? '')}" autocomplete="off"></label><label>Dose / amount<input name="dose" required maxlength="80" value="${esc(existing?.dose ?? '')}" placeholder="Example: 10 mg"></label><label>Directions <span class="optional">optional</span><input name="instructions" maxlength="160" value="${esc(existing?.instructions ?? '')}" placeholder="Example: with breakfast"></label><fieldset><legend>Scheduled time of day</legend>${slots.map(slot => `<label class="check"><input type="checkbox" name="slots" value="${slot}" ${existing?.slots.includes(slot) ? 'checked' : ''}> ${slot}</label>`).join('')}</fieldset><p class="form-error" aria-live="assertive"></p><footer><button class="outline" value="cancel">Cancel</button><button class="primary" value="save">Save medication</button></footer></form>`
   document.body.append(dialog); dialog.showModal(); dialog.querySelector<HTMLInputElement>('input[name="name"]')!.focus()
-  dialog.querySelector<HTMLFormElement>('#med-form')!.addEventListener('submit', event => {
+  dialog.querySelector<HTMLFormElement>('#med-form')!.addEventListener('submit', async event => {
     const submitter = (event as SubmitEvent).submitter as HTMLButtonElement | null
     if (submitter?.value !== 'save') return
     event.preventDefault()
     const form = new FormData(event.currentTarget as HTMLFormElement)
     const chosen = form.getAll('slots').map(String) as Slot[]
     const error = dialog.querySelector('.form-error')!
+    const name = String(form.get('name')).trim()
+    const dose = String(form.get('dose')).trim()
+    if (!name || !dose) { error.textContent = 'Enter a medication name and dose or amount.'; return }
     if (!chosen.length) { error.textContent = 'Choose at least one time of day.'; return }
-    const medication: Medication = { id: existing?.id ?? crypto.randomUUID(), name: String(form.get('name')).trim(), dose: String(form.get('dose')).trim(), instructions: String(form.get('instructions')).trim(), slots: chosen, active: true, changedAt: new Date().toISOString() }
-    save({ ...data, medications: existing ? data.medications.map(m => m.id === existing.id ? medication : m) : [...data.medications, medication] })
-    message = `${medication.name} saved in the current regimen.`; dialog.close(); dialog.remove()
+    const medication: Medication = { id: existing?.id ?? crypto.randomUUID(), name, dose, instructions: String(form.get('instructions')).trim(), slots: chosen, active: true, changedAt: new Date().toISOString() }
+    const changedAt = new Date().toISOString()
+    const change = existing && (existing.dose !== medication.dose || existing.instructions !== medication.instructions || existing.active !== medication.active || existing.slots.join('|') !== medication.slots.join('|')) ? { id: crypto.randomUUID(), medicationId: existing.id, medicationName: existing.name, previous: { dose: existing.dose, instructions: existing.instructions, slots: existing.slots, active: existing.active }, next: { dose: medication.dose, instructions: medication.instructions, slots: medication.slots, active: medication.active }, changedAt } : null
+    focusAfterRender = existing ? '#regimen-heading' : 'h1'
+    message = `${medication.name} saved in the current regimen.`
+    await save({ ...data, medications: existing ? data.medications.map(m => m.id === existing.id ? medication : m) : [...data.medications, medication], regimenChanges: change ? [...data.regimenChanges, change] : data.regimenChanges })
+    dialog.close(); dialog.remove()
   })
   dialog.addEventListener('close', () => dialog.remove())
 }
@@ -127,14 +148,14 @@ async function exportData() {
   render()
 }
 
-async function importData(file: File) { try { const text = await file.text(); const parsed = JSON.parse(text); const imported = parsed.encrypted ? await decryptExport(text, prompt('Enter the backup passphrase.') || '') : parsed as AppData; if (!Array.isArray(imported.medications) || !Array.isArray(imported.logs)) throw new Error('That file is not a Med Handoff Card backup.'); if (!confirm(`Replace this device’s current record with the backup for ${imported.personName || 'this care recipient'}?`)) return; save(imported); message = 'Backup restored to this device.' } catch { message = 'Could not import that backup. Check the file and passphrase.'; render() } }
+async function importData(file: File) { try { const text = await file.text(); const parsed = JSON.parse(text); const decrypted = parsed.encrypted ? await decryptExport(text, prompt('Enter the backup passphrase.') || '') : parsed; const imported = normalizeAppData(decrypted); if (!imported) throw new Error('That file is not a complete Med Handoff Card backup.'); if (!confirm(`Replace this device’s current record with the backup for ${imported.personName || 'this care recipient'}?`)) return; message = 'Backup restored to this device.'; await save(imported) } catch { message = 'Could not import that backup. Check the file and passphrase.'; render() } }
 
 async function showQr() { try { qr = await QRCode.toDataURL(JSON.stringify(handoffPayload(data, selectedDate)), { errorCorrectionLevel: 'M', margin: 1, color: { dark: '#142a36', light: '#f7f0df' }, width: 440 }); message = 'QR handoff created locally.' } catch { message = 'Could not create the QR handoff.' } render() }
 
 document.addEventListener('click', async event => {
   const target = (event.target as HTMLElement).closest<HTMLElement>('[data-action]'); if (!target) return
   const action = target.dataset.action
-  if (action === 'theme') { theme = theme === 'dark' ? 'light' : 'dark'; localStorage.setItem('mhc_theme', theme); render() }
+  if (action === 'theme') { theme = theme === 'dark' ? 'light' : 'dark'; localStorage.setItem(themeKey, theme); render() }
   if (action === 'person') { const name = prompt('Who is this handoff for?', data.personName); if (name !== null) { save({ ...data, personName: name.trim() }); message = 'Care recipient name saved.' } }
   if (action === 'add-med') openMedication()
   if (action === 'edit-med') openMedication(data.medications.find(m => m.id === target.dataset.id))
@@ -155,7 +176,7 @@ window.addEventListener('online', () => { online = true; render() }); window.add
 
 async function init() {
   if (demoMode) data = sampleData()
-  else try { data = await loadData() } catch { message = 'Local storage is unavailable. Your changes may not persist.' }
+  else try { data = await loadData() } catch { message = 'Could not read the saved record. Start a new handoff or import a valid backup.' }
   render()
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').then(registration => {
     const check = () => { if (registration.waiting && navigator.serviceWorker.controller) { updateReady = true; render() } }
