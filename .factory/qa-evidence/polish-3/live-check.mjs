@@ -1,5 +1,6 @@
 import { chromium } from 'playwright'
 import AxeBuilder from '@axe-core/playwright'
+import jsQR from 'jsqr'
 
 const origin = 'https://med-handoff-card.sociobot.in'
 const evidence = '.factory/qa-evidence/polish-3/live'
@@ -158,6 +159,28 @@ const metadata = page => page.evaluate(() => ({
   watch(page)
   await page.goto(`${origin}/demo`, { waitUntil: 'networkidle' })
   result.routes.demo = await metadata(page)
+  await page.getByRole('button', { name: 'Show QR handoff' }).click()
+  const image = await page.getByAltText('QR code containing the selected medication handoff data.').evaluate(async element => {
+    await element.decode()
+    const canvas = document.createElement('canvas')
+    canvas.width = element.naturalWidth
+    canvas.height = element.naturalHeight
+    const context = canvas.getContext('2d')
+    context.drawImage(element, 0, 0)
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+    return { width: canvas.width, height: canvas.height, pixels: Array.from(imageData.data) }
+  })
+  const decoded = jsQR(new Uint8ClampedArray(image.pixels), image.width, image.height)
+  assert(decoded, 'live QR could not be decoded without a key')
+  const payload = JSON.parse(decoded.data)
+  result.demo.qr = {
+    date: payload.date,
+    person: payload.person,
+    medications: payload.regimen.map(item => item.name),
+    doses: payload.doses.map(item => ({ medicationId: item.medicationId, slot: item.slot, state: item.state }))
+  }
+  assert(result.demo.qr.person === 'Nora Ellis' && result.demo.qr.medications.join('|') === 'Metformin|Lisinopril|Vitamin D3', 'live QR medication list is incomplete')
+  assert(result.demo.qr.doses.map(item => item.state).join('|') === 'taken|held|taken', 'live QR dose states are incomplete')
   result.accessibility.light = (await new AxeBuilder({ page }).analyze()).violations.filter(item => ['serious', 'critical'].includes(item.impact)).length
   await page.getByRole('button', { name: 'Use night view' }).click()
   result.accessibility.dark = (await new AxeBuilder({ page }).analyze()).violations.filter(item => ['serious', 'critical'].includes(item.impact)).length

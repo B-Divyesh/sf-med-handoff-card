@@ -12,7 +12,7 @@ Every finding in `.factory/review-1.md`, `.factory/review-2.md`, and `.factory/r
 | F-1-4 | Every HTML route links the dedicated 180 px PNG touch icon. | Static policy and route tests; `live/live-check.json` `apple` fields; live `/icons/apple-touch-icon.png`. |
 | F-1-5 | The first-screen action opens the complete `?demo=1` sample with one click. | `@claim:demo-entry`; `live/live-check.json` first-screen and demo entry; `live/home-mobile.png`; `live/demo-mobile.png`; live `/?demo=1`. |
 | F-1-6 | The banner limits its promise to tested dose isolation; direct demo mode never opens the real record database. | `@claim:demo-isolation`; `live/live-check.json` `directIsolation` and `exit`; live `/?demo=1`. |
-| F-1-7 | QR wording names the selected date, full current medication list, and readable dose states. | `@claim:qr-handoff`; `@claim:qr-contents`; individual clean-clone claim logs; live `/demo`. |
+| F-1-7 | QR wording names the selected date, full current medication list, and readable dose states. | `@claim:qr-handoff`; `@claim:qr-contents`; individual clean-clone claim logs; decoded live payload in `live/live-check.json`; live `/demo`. |
 | F-1-8 | README points to exact claim and quality test files without a broad coverage assertion. | Source review; clean-clone `full-suite.log` names all 30 browser tests. |
 | F-1-9 | The print promise names the exact included eight-medication fixture. | `@claim:print-handoff`; clean-clone `claim-print-handoff.log`. |
 | F-1-10 | Privacy provides confirmed record deletion while demo data stays separate. | `@claim:delete-record`; `live/live-check.json` deletion result; `live/privacy-desktop.png`; live `/privacy`. |

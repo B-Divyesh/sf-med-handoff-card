@@ -25,7 +25,7 @@ Implementation commit: `695ffb86a56c6decfe82e4f96df5d672a9e54927`.
 - `/opt/fleet/lib/verify-url.sh` passed locally and live: HTTP 200, no console errors, `lang=en`, one `h1`, `main`, alt text, and named buttons.
 - Local Lighthouse mobile: 99 performance, 100 accessibility, 100 best practices, 100 SEO; FCP 1.1 s, LCP 2.1 s, TBT 0 ms, CLS 0.
 - Live Lighthouse mobile: 100 performance, 100 accessibility, 100 best practices, 100 SEO; FCP 0.9 s, LCP 1.8 s, TBT 0 ms, CLS 0.
-- Cold live audit confirmed the exact first-screen copy and all three facts fit at 390 × 844; one click opens `?demo=1`; the direct demo creates no real database; reset restores Nora Ellis; exit opens an empty real record; offline reload retains the sample.
+- Cold live audit confirmed the exact first-screen copy and all three facts fit at 390 × 844; one click opens `?demo=1`; the direct demo creates no real database; reset restores Nora Ellis; exit opens an empty real record; the QR decodes to the complete sample; offline reload retains it.
 - Cold live routing confirmed route-specific titles and metadata, common chrome, focused and announced headings, Back/Forward focus, working links, Privacy deletion, and a designed HTTP 404.
 - Live request logs contain no external request and no console/page errors. Local/live hashes match for `index.html`, `sw.js`, `manifest.webmanifest`, hashed JavaScript, and CSS.
 

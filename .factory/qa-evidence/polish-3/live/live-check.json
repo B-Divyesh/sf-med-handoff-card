@@ -43,6 +43,32 @@
     "directIsolation": {
       "before": [],
       "after": []
+    },
+    "qr": {
+      "date": "2026-08-28",
+      "person": "Nora Ellis",
+      "medications": [
+        "Metformin",
+        "Lisinopril",
+        "Vitamin D3"
+      ],
+      "doses": [
+        {
+          "medicationId": "demo-metformin",
+          "slot": "Morning",
+          "state": "taken"
+        },
+        {
+          "medicationId": "demo-lisinopril",
+          "slot": "Morning",
+          "state": "held"
+        },
+        {
+          "medicationId": "demo-vitamin-d",
+          "slot": "Noon",
+          "state": "taken"
+        }
+      ]
     }
   },
   "routes": {
