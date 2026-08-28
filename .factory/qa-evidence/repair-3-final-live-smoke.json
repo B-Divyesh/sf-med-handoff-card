@@ -1,0 +1,35 @@
+{
+  "viewports": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "width": {
+        "scroll": 1280,
+        "client": 1280,
+        "h1": 1
+      },
+      "seriousAxe": 0,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "width": {
+        "scroll": 390,
+        "client": 390,
+        "h1": 1
+      },
+      "seriousAxe": 0,
+      "errors": []
+    }
+  ],
+  "focus": true,
+  "retention": true,
+  "offline": true,
+  "externalRequests": [],
+  "darkSeriousAxe": 0
+}

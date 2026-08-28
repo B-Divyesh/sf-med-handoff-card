@@ -2,7 +2,7 @@
 
 ## Release status
 
-Local release verification passes. This repair starts from candidate
+Release verification passes locally and on the deployed custom domain. This repair starts from candidate
 `b463f0a516a1e4cde8e3f108f68fc41ea93bd701` and retains the independent
 verifier fixes recorded in report commit
 `1ce8b3094f717ca8fd7586efe50e971e5e08bdd1`.
@@ -90,13 +90,25 @@ scripts, AI calls, or paid features.
 
 ## Deployment
 
-Deployment is configured as the work order specifies: build `dist/`, then use
-the factory static deployment path for `med-handoff-card`. Before deployment,
-the live origin still served the prior index hash
-`cfae52cb929c7f461c309ad39bdb6d360c0280cd91bc29b99253719fc23bd4f6` and
-service-worker hash
-`483848335f0ba8aee6c5d21a5bd827fc2e8e7ba0625fc0c2de9ba59fd6a0f468`.
-Post-deployment identity and response-policy evidence will be added below.
+Commit `ceac75700139e6cdf0a561581268c4ab9ac4f077` was pushed to
+`origin/main`. `/opt/fleet/lib/deploy-static.sh med-handoff-card dist` reused
+the existing `sf-med-handoff-card` Static Web App and completed production
+deployment `b1b8e446-1d28-4b38-aa48-48e5f9d86913`. The custom domain reports
+Ready and HTTPS returns 200.
+
+Live byte identity matches `dist/` for index, service worker, JavaScript, and
+CSS. The live origin serves CSP and the other configured security headers,
+one-year immutable caching on hashed assets, `no-cache` on the service worker,
+`application/manifest+json` for the manifest, and the designed page with HTTP
+404 for an unknown route.
+
+A fresh live browser smoke passed at 1280 × 900 and 390 × 844: one h1, no
+overflow, zero console errors, zero serious/critical axe findings in light and
+dark, no off-origin requests, h1 focus after medication Save, medication
+retention after immediate reload, and demo reload offline after visiting
+Privacy. Evidence: `.factory/qa-evidence/repair-3-final-live-smoke.json` and
+`.factory/qa-evidence/repair-3-final-live-verify-url/` (200; 618 ms; zero
+browser errors).
 
 ## Known gaps
 
