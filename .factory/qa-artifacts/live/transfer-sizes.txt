@@ -1,0 +1,6 @@
+
+COMPRESSED TRANSFERS
+/ 200 605 bytes 0.252876s
+/assets/index-Y5Z7UfTJ.js 200 18845 bytes 0.529025s
+/assets/index-B8HXg1bI.css 200 3882 bytes 1.521267s
+/assets/handoff-tray-CQYaEVoZ.webp 200 170452 bytes 1.188979s

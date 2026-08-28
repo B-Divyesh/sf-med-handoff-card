@@ -1,0 +1,15 @@
+{
+  "medicationCount": 8,
+  "outputs": [
+    {
+      "format": "A4",
+      "pageCount": 2,
+      "bytes": 51881
+    },
+    {
+      "format": "Letter",
+      "pageCount": 2,
+      "bytes": 51843
+    }
+  ]
+}

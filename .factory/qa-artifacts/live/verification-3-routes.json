@@ -1,0 +1,68 @@
+{
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "title": "Med Handoff Card — track caregiver dose handoffs",
+      "h1": "Track medicine handoffs between family caregivers.",
+      "axeBlocking": 0
+    },
+    {
+      "path": "/demo",
+      "status": 200,
+      "title": "Demo — Med Handoff Card",
+      "h1": "Today’s handoff",
+      "axeBlocking": 0
+    },
+    {
+      "path": "/privacy",
+      "status": 200,
+      "title": "Privacy — Med Handoff Card",
+      "h1": "Privacy, plainly.",
+      "axeBlocking": 0
+    },
+    {
+      "path": "/terms",
+      "status": 200,
+      "title": "Terms — Med Handoff Card",
+      "h1": "Terms for a practical handoff.",
+      "axeBlocking": 0
+    },
+    {
+      "path": "/verification-3-missing",
+      "status": 404,
+      "title": "Page not found — Med Handoff Card",
+      "h1": "This page is not on the handoff card.",
+      "axeBlocking": 0
+    }
+  ],
+  "links": [
+    {
+      "href": "/",
+      "status": 200
+    },
+    {
+      "href": "/demo",
+      "status": 200
+    },
+    {
+      "href": "/privacy",
+      "status": 200
+    },
+    {
+      "href": "/terms",
+      "status": 200
+    }
+  ],
+  "dateBoundary": {
+    "selected": "2099-12-31",
+    "heading": "Today’s handoff",
+    "updateHeading": "Today’s updates",
+    "regimenChangeVisible": true,
+    "futureTakenAllowed": true
+  },
+  "errors": [
+    "https://med-handoff-card.sociobot.in/verification-3-missing: Failed to load resource: the server responded with a status of 404 ()"
+  ],
+  "unexpectedErrors": []
+}

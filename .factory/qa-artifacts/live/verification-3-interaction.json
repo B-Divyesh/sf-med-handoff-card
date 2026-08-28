@@ -1,0 +1,6 @@
+{
+  "interaction": "theme switch and rerender",
+  "nextPaintMs": 28.9000000001397,
+  "budgetMs": 200,
+  "note": "Representative next-paint latency; field INP requires real-user traffic."
+}

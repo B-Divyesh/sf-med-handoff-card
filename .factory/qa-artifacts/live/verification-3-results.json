@@ -1,0 +1,126 @@
+{
+  "base": "https://med-handoff-card.sociobot.in",
+  "checkedAt": "2026-08-28T19:43:35.621Z",
+  "scenarios": {
+    "desktopDemo": {
+      "errors": [],
+      "requests": [
+        "https://med-handoff-card.sociobot.in/",
+        "https://med-handoff-card.sociobot.in/assets/index-Y5Z7UfTJ.js",
+        "https://med-handoff-card.sociobot.in/assets/index-B8HXg1bI.css",
+        "https://med-handoff-card.sociobot.in/assets/handoff-tray-CQYaEVoZ.webp",
+        "https://med-handoff-card.sociobot.in/",
+        "https://med-handoff-card.sociobot.in/assets/index-Y5Z7UfTJ.js",
+        "https://med-handoff-card.sociobot.in/assets/index-B8HXg1bI.css",
+        "https://med-handoff-card.sociobot.in/assets/handoff-tray-CQYaEVoZ.webp",
+        "https://med-handoff-card.sociobot.in/demo",
+        "https://med-handoff-card.sociobot.in/assets/index-Y5Z7UfTJ.js",
+        "https://med-handoff-card.sociobot.in/assets/index-B8HXg1bI.css",
+        "https://med-handoff-card.sociobot.in/demo",
+        "https://med-handoff-card.sociobot.in/assets/index-Y5Z7UfTJ.js",
+        "https://med-handoff-card.sociobot.in/assets/index-B8HXg1bI.css",
+        "https://med-handoff-card.sociobot.in/privacy",
+        "https://med-handoff-card.sociobot.in/site.css",
+        "https://med-handoff-card.sociobot.in/demo?verification-3=1",
+        "https://med-handoff-card.sociobot.in/assets/index-Y5Z7UfTJ.js",
+        "https://med-handoff-card.sociobot.in/assets/index-B8HXg1bI.css",
+        "https://med-handoff-card.sociobot.in/demo?verification-3=1",
+        "https://med-handoff-card.sociobot.in/assets/index-Y5Z7UfTJ.js",
+        "https://med-handoff-card.sociobot.in/assets/index-B8HXg1bI.css"
+      ],
+      "failedRequests": [],
+      "firstRead": {
+        "heading": "Track medicine handoffs between family caregivers.",
+        "audience": "For adult children and home caregivers who need a clear record when care changes hands.",
+        "primary": "Try it with sample data",
+        "primaryBottom": 491.75,
+        "facts": [
+          "Medication records stay in this browser.",
+          "The board works offline after your first visit.",
+          "Printing, QR handoffs, and exports are free."
+        ]
+      },
+      "skipFocus": {
+        "text": "Skip to handoff board",
+        "outline": "3px"
+      },
+      "downloads": [
+        {
+          "name": "med-handoff-backup-2026-08-28.json",
+          "bytes": 2082
+        },
+        {
+          "name": "med-handoff-dose-log-2026-08-28.csv",
+          "bytes": 491
+        }
+      ],
+      "axe": {
+        "lightBlocking": [],
+        "darkBlocking": []
+      },
+      "reducedMotionAnimationName": "none",
+      "offOriginRequests": []
+    },
+    "mobile": {
+      "errors": [],
+      "requests": [
+        "https://med-handoff-card.sociobot.in/demo",
+        "https://med-handoff-card.sociobot.in/assets/index-Y5Z7UfTJ.js",
+        "https://med-handoff-card.sociobot.in/assets/index-B8HXg1bI.css"
+      ],
+      "failedRequests": [],
+      "scrollWidth": 390,
+      "undersizedTargets": [],
+      "axeBlocking": [],
+      "text200ScrollWidth": 390,
+      "text200Clipped": [],
+      "offOriginRequests": []
+    },
+    "realRecord": {
+      "errors": [],
+      "requests": [
+        "https://med-handoff-card.sociobot.in/",
+        "https://med-handoff-card.sociobot.in/assets/index-Y5Z7UfTJ.js",
+        "https://med-handoff-card.sociobot.in/assets/index-B8HXg1bI.css",
+        "https://med-handoff-card.sociobot.in/assets/handoff-tray-CQYaEVoZ.webp",
+        "https://med-handoff-card.sociobot.in/",
+        "https://med-handoff-card.sociobot.in/assets/index-Y5Z7UfTJ.js",
+        "https://med-handoff-card.sociobot.in/assets/index-B8HXg1bI.css",
+        "https://med-handoff-card.sociobot.in/",
+        "https://med-handoff-card.sociobot.in/assets/index-Y5Z7UfTJ.js",
+        "https://med-handoff-card.sociobot.in/assets/index-B8HXg1bI.css",
+        "https://med-handoff-card.sociobot.in/assets/handoff-tray-CQYaEVoZ.webp",
+        "https://med-handoff-card.sociobot.in/",
+        "https://med-handoff-card.sociobot.in/assets/index-Y5Z7UfTJ.js",
+        "https://med-handoff-card.sociobot.in/assets/index-B8HXg1bI.css",
+        "https://med-handoff-card.sociobot.in/assets/handoff-tray-CQYaEVoZ.webp",
+        "https://med-handoff-card.sociobot.in/",
+        "https://med-handoff-card.sociobot.in/assets/index-Y5Z7UfTJ.js",
+        "https://med-handoff-card.sociobot.in/assets/index-B8HXg1bI.css"
+      ],
+      "failedRequests": [],
+      "stoppedMedication": {
+        "active": false,
+        "logsStored": 1,
+        "historyVisible": 0,
+        "changesBeforeStop": 1,
+        "changesAfterStop": 1
+      },
+      "stopRecordedAsRegimenChange": false,
+      "validImportRestored": true,
+      "offOriginRequests": []
+    }
+  },
+  "defects": [
+    {
+      "severity": "high",
+      "id": "stopped-medication-not-in-regimen-history",
+      "evidence": "Regimen-change count stayed 1 after confirming Stop and reloading."
+    },
+    {
+      "severity": "high",
+      "id": "last-stopped-medication-hides-existing-dose-history",
+      "evidence": "1 dose log remains in IndexedDB, but the empty-record screen renders no history section."
+    }
+  ]
+}

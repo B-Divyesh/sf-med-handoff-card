@@ -1,0 +1,18 @@
+
+> med-handoff-card@1.0.0 test:claims
+> playwright test tests/claims.spec.ts --grep @claim:dose-state-notes
+
+[WebServer] (node:2222) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:2253) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 1 test using 1 worker
+
+(node:2271) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:2271) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [chromium] › tests/claims.spec.ts:150:1 › @claim:dose-state-notes retains a held dose and caregiver note after reload (1.9s)
+
+  1 passed (9.8s)

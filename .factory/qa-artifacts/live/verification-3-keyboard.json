@@ -1,0 +1,338 @@
+{
+  "sequence": [
+    {
+      "tag": "A",
+      "text": "Skip to handoff board",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": null,
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Reset demo",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "reset-demo",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Start for real",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "start-real",
+      "outline": "3px"
+    },
+    {
+      "tag": "A",
+      "text": "MHMed HandoffCard",
+      "ariaLabel": "Med Handoff Card home",
+      "id": "",
+      "dataAction": null,
+      "outline": "3px"
+    },
+    {
+      "tag": "A",
+      "text": "Board",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": null,
+      "outline": "3px"
+    },
+    {
+      "tag": "A",
+      "text": "Demo",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": null,
+      "outline": "3px"
+    },
+    {
+      "tag": "A",
+      "text": "Tools",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": null,
+      "outline": "3px"
+    },
+    {
+      "tag": "A",
+      "text": "Privacy",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": null,
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "◐ Night",
+      "ariaLabel": "Switch to dark appearance",
+      "id": "",
+      "dataAction": "theme",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Nora Ellis",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "person",
+      "outline": "3px"
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "id": "date",
+      "dataAction": null,
+      "outline": "3px"
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "id": "date",
+      "dataAction": null,
+      "outline": "3px"
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "id": "date",
+      "dataAction": null,
+      "outline": "3px"
+    },
+    {
+      "tag": "INPUT",
+      "text": "",
+      "ariaLabel": null,
+      "id": "date",
+      "dataAction": null,
+      "outline": "0px"
+    },
+    {
+      "tag": "TEXTAREA",
+      "text": "Nora ate breakfast. The evening Metformin dose still needs confirmation.",
+      "ariaLabel": null,
+      "id": "shift-note",
+      "dataAction": null,
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "✓Taken",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "dose",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "ⅡHeld",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "dose",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "?Unknown",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "dose",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "✓Taken",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "dose",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "ⅡHeld",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "dose",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "?Unknown",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "dose",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "✓Taken",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "dose",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "ⅡHeld",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "dose",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "?Unknown",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "dose",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "✓Taken",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "dose",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "ⅡHeld",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "dose",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "?Unknown",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "dose",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Add medication",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "add-med",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Edit",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "edit-med",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Stop",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "stop-med",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Edit",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "edit-med",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Stop",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "stop-med",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Edit",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "edit-med",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Stop",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "stop-med",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Print handoff",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "print",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Show QR handoff",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "qr",
+      "outline": "3px"
+    },
+    {
+      "tag": "BUTTON",
+      "text": "Export backup",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": "export",
+      "outline": "3px"
+    },
+    {
+      "tag": "A",
+      "text": "Privacy",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": null,
+      "outline": "3px"
+    },
+    {
+      "tag": "A",
+      "text": "Terms",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": null,
+      "outline": "3px"
+    },
+    {
+      "tag": "BODY",
+      "text": "Skip to handoff board Demo — sample data, nothing is saved to your real recordTry every control with",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": null,
+      "outline": "0px"
+    },
+    {
+      "tag": "A",
+      "text": "Skip to handoff board",
+      "ariaLabel": null,
+      "id": "",
+      "dataAction": null,
+      "outline": "3px"
+    }
+  ],
+  "importLabel": {
+    "tabIndex": -1,
+    "inputHidden": true,
+    "inputTabIndex": 0
+  },
+  "importReached": false
+}
