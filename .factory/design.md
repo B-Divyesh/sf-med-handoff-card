@@ -47,6 +47,12 @@ The demo uses a flat marigold proof strip above the masthead. It reads like a
 temporary chart tab and keeps the sample boundary visible without changing the
 board's hierarchy. Its square controls follow the same stamped-paper grammar.
 
+Privacy, Terms, and the missing-page route now use this same masthead, footer,
+theme control, paper texture, and stamped actions. On phones, the four-link
+navigation becomes a ruled second masthead row instead of disappearing. The
+record-deletion area uses a rose offset stamp so the destructive boundary is
+clear without introducing a different visual language.
+
 ## Original imagery
 
 Art direction: a flat, editorial risograph-like illustration of an unbranded

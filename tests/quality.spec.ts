@@ -22,7 +22,7 @@ test('desktop and mobile have one heading, no console errors, and no serious axe
 
 test('dark mode has no serious axe findings', async ({ page }) => {
   await page.goto('/demo')
-  await page.getByRole('button', { name: 'Switch to dark appearance' }).click()
+  await page.getByRole('button', { name: 'Use night view' }).click()
   const results = await new AxeBuilder({ page }).analyze()
   expect(results.violations.filter(item => item.impact === 'serious' || item.impact === 'critical')).toEqual([])
 })
@@ -79,7 +79,7 @@ test('invalid backup, blank required fields, dialog naming, and focus recovery a
 
   await page.locator('#import-file').setInputFiles({ name: 'broken.json', mimeType: 'application/json', buffer: Buffer.from('{"personName":"QA","shiftNote":"","medications":[{"active":true}],"logs":[]}' ) })
   await expect(page.locator('.toast')).toContainText('Could not import that backup')
-  await expect(page.getByRole('heading', { name: 'Track medicine handoffs between family caregivers.' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Track medication handoffs between family caregivers.' })).toBeVisible()
 
   await page.getByRole('button', { name: 'Add your first medication' }).click()
   await page.getByLabel('Medication name').fill('Focus medicine')
@@ -91,7 +91,7 @@ test('invalid backup, blank required fields, dialog naming, and focus recovery a
 
 test('demo appearance preference stays in the demo storage namespace', async ({ page }) => {
   await page.goto('/demo')
-  await page.getByRole('button', { name: 'Switch to dark appearance' }).click()
+  await page.getByRole('button', { name: 'Use night view' }).click()
   expect(await page.evaluate(() => localStorage.getItem('demo:mhc_theme'))).toBe('dark')
   expect(await page.evaluate(() => localStorage.getItem('mhc_theme'))).toBeNull()
   await page.getByRole('button', { name: 'Start for real' }).click()
@@ -105,17 +105,56 @@ test('static response policy declares CSP, immutable assets, manifest MIME, and 
   expect(config.mimeTypes['.webmanifest']).toBe('application/manifest+json')
   expect(config.responseOverrides['404']).toMatchObject({ rewrite: '/404.html', statusCode: 404 })
   expect(config.navigationFallback.exclude).toContain('/*')
-  expect(config.routes.find((route: { route: string }) => route.route === '/demo').rewrite).toBe('/index.html')
+  expect(config.routes.find((route: { route: string }) => route.route === '/demo').rewrite).toBe('/demo/index.html')
   await expect((await request.get('/robots.txt')).status()).toBe(200)
   await expect((await request.get('/sitemap.xml')).status()).toBe(200)
   await expect((await request.get('/404.html')).status()).toBe(200)
   for (const path of ['/privacy/', '/terms/', '/404.html']) {
     const response = await request.get(path)
     const document = await response.text()
-    expect(document).toContain('<header')
-    expect(document).toContain('<footer')
-    expect(document).toContain('Built by Param Factory')
+    expect(document).toContain('rel="apple-touch-icon" sizes="180x180"')
+    expect(document).toContain('property="og:title"')
+    expect(document).toContain('name="twitter:title"')
   }
+})
+
+test('real routes update metadata, share chrome, announce navigation, and restore heading focus', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('link', { name: 'Privacy' }).first().click()
+  await expect(page).toHaveURL('/privacy')
+  await expect(page.getByRole('heading', { name: 'Privacy' })).toBeFocused()
+  await expect(page).toHaveTitle('Privacy — Med Handoff Card')
+  await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /delete your local medication record/)
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', 'Privacy — Med Handoff Card')
+  await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute('content', 'Privacy — Med Handoff Card')
+  await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute('href', '/icons/apple-touch-icon.png')
+  await expect(page.getByRole('button', { name: 'Use night view' })).toBeVisible()
+  await expect(page.getByRole('contentinfo')).toContainText('Original artwork was generated for Med Handoff Card')
+  await expect(page.locator('.route-status')).toHaveText('Privacy — Med Handoff Card loaded')
+
+  await page.goBack()
+  await expect(page.getByRole('heading', { name: 'Track medication handoffs between family caregivers.' })).toBeFocused()
+  await page.goForward()
+  await expect(page.getByRole('heading', { name: 'Privacy' })).toBeFocused()
+
+  await page.getByRole('link', { name: 'Terms' }).click()
+  await expect(page.getByRole('heading', { name: 'Terms of use' })).toBeFocused()
+  await expect(page).toHaveTitle('Terms of use — Med Handoff Card')
+
+  await page.goto('/404.html')
+  await expect(page.getByRole('heading', { name: 'Page not found.' })).toBeVisible()
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,nofollow')
+  await expect(page.getByRole('button', { name: 'Use night view' })).toBeVisible()
+})
+
+test('mobile navigation and 200 percent text do not overflow', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/')
+  await expect(page.getByRole('navigation', { name: 'Primary' })).toBeVisible()
+  await page.evaluate(() => { document.documentElement.style.fontSize = '200%' })
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390)
+  await page.getByRole('link', { name: 'Privacy' }).first().click()
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390)
 })
 
 test('a waiting service worker is told to activate before the app reloads', async ({ page }) => {
@@ -126,7 +165,7 @@ test('a waiting service worker is told to activate before the app reloads', asyn
     await page.evaluate(() => navigator.serviceWorker.ready)
     await page.reload()
     await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true)
-    await writeFile(workerPath, original.replace("med-handoff-v5", `med-handoff-v5-test-${Date.now()}`))
+    await writeFile(workerPath, original.replace("med-handoff-v6", `med-handoff-v6-test-${Date.now()}`))
     await page.evaluate(async () => { const registration = await navigator.serviceWorker.getRegistration(); await registration?.update() })
     await expect(page.getByRole('button', { name: 'Install update' })).toBeVisible()
     const loaded = page.waitForEvent('load')

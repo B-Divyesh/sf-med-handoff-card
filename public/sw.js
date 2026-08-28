@@ -1,5 +1,5 @@
-const VERSION = 'med-handoff-v5'
-const SHELL = ['/', '/demo', '/index.html', '/manifest.webmanifest', '/offline.html', '/404.html', '/privacy/index.html', '/terms/index.html', '/icons/icon-192.svg', '/icons/icon-512.svg']
+const VERSION = 'med-handoff-v6'
+const SHELL = ['/', '/demo', '/index.html', '/demo/index.html', '/manifest.webmanifest', '/offline.html', '/404.html', '/privacy/index.html', '/terms/index.html', '/icons/icon-192.svg', '/icons/icon-512.svg', '/icons/apple-touch-icon.png']
 
 self.addEventListener('install', event => event.waitUntil(caches.open(VERSION).then(cache => cache.addAll(SHELL))))
 self.addEventListener('activate', event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== VERSION).map(key => caches.delete(key)))).then(() => self.clients.claim())))
@@ -8,10 +8,11 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url)
   if (url.origin !== location.origin) return
   if (event.request.mode === 'navigate') {
-    // A navigation may be the legal pages. Never let it overwrite the
-    // precached board shell; only board URLs use that shell while offline.
-    const isBoardRoute = url.pathname === '/' || url.pathname === '/demo'
-    event.respondWith(fetch(event.request).catch(() => isBoardRoute ? caches.match('/index.html') : caches.match('/offline.html')))
+    const fallback = url.pathname === '/privacy' || url.pathname === '/privacy/' ? '/privacy/index.html'
+      : url.pathname === '/terms' || url.pathname === '/terms/' ? '/terms/index.html'
+        : url.pathname === '/demo' ? '/demo/index.html'
+          : url.pathname === '/' ? '/index.html' : '/offline.html'
+    event.respondWith(fetch(event.request).catch(() => caches.match(fallback)))
     return
   }
   event.respondWith(caches.open(VERSION).then(cache => cache.match(new URL(event.request.url).pathname)).then(hit => hit || fetch(event.request).then(response => { if (response.ok) caches.open(VERSION).then(cache => cache.put(new URL(event.request.url).pathname, response.clone())); return response })))

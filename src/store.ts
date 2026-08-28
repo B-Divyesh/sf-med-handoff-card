@@ -59,3 +59,13 @@ export function saveData(data: AppData): Promise<void> {
   // immediately after Save cannot overtake the durable write.
   return openDatabase ? write(openDatabase) : database().then(write)
 }
+
+export function deleteData(): Promise<void> {
+  const remove = (db: IDBDatabase) => new Promise<void>((resolve, reject) => {
+    const tx = db.transaction(STORE, 'readwrite')
+    tx.objectStore(STORE).delete(KEY)
+    tx.oncomplete = () => resolve()
+    tx.onerror = () => reject(tx.error)
+  })
+  return openDatabase ? remove(openDatabase) : database().then(remove)
+}
