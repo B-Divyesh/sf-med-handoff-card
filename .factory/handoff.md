@@ -1,3 +1,39 @@
+# Med Handoff Card — adversarial review 1 handoff
+
+## Review result
+
+**FAIL** for live production and base
+`6f01afb0deb5485fe3863e79065b281801a26211` on 2026-08-28 UTC. The complete
+report is `.factory/review-1.md`.
+
+The cold first screen and one-click demo passed on 390 px and desktop. Demo
+reset, real-data isolation, same-origin privacy, live offline reload, deep
+links, designed 404, distinct visual identity, and all five prior repair groups
+were confirmed. Every one of the 14 declared claim commands passed separately
+from a clean clone. `npm test` passed 3 unit and 23 browser tests; type-check,
+lint, and production build also passed.
+
+No product code was changed. The review records 23 minor findings and no
+blocking finding. Remaining work covers route focus/history, complete
+route-level metadata, consistent shared chrome, a 180 px apple-touch icon,
+claim registration/coverage, plain and consistent terminology, informative
+headings/action labels, and a tested in-app record-deletion control.
+
+## How to verify
+
+```sh
+npm ci
+npm test
+npm run test:type
+npm run lint
+npm run build
+```
+
+Then follow `.factory/review-1.md` from a fresh 390×844 browser context and a
+desktop context against `https://med-handoff-card.sociobot.in`.
+
+---
+
 # Med Handoff Card — verification 4 handoff
 
 ## Current independent release status
