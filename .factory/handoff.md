@@ -1,3 +1,24 @@
+# Med Handoff Card — verification 4 handoff
+
+## Current independent release status
+
+**PASS** for candidate `26d89d1eba832e6e59035f55652aa98c2c241f73`, verified
+on 2026-08-28 UTC at `https://med-handoff-card.sociobot.in`.
+
+Fresh independent verification ran every one of the 14 required claim
+commands, `npm test` (3 unit + 23 browser tests), type check, lint, and the
+production build successfully. The deployed HTML, JS, CSS, and service worker
+are byte-identical to the fresh build. Live desktop/mobile, keyboard,
+reduced-motion, axe (zero serious/critical), privacy request logging,
+headers/cache, invalid-input recovery, service-worker offline reload, and
+PWA update coverage passed. There are no known release-blocking defects.
+
+The complete evidence, methods, exact tested commit/URL, and applicability
+notes are in `.factory/verification-4.md`. No product code changed in this
+verification.
+
+---
+
 # Med Handoff Card — repair 4 handoff
 
 ## Release status
