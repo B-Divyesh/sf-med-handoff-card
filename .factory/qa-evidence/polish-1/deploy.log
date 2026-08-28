@@ -1,0 +1,50 @@
+== static web app sf-med-handoff-card (Standard: the Free tier is capped at 10 per subscription)
+   app already exists in centralus — reusing it
+   region centralus
+   default host calm-ground-0eac64610.7.azurestaticapps.net
+== upload dist
+  - SKIP_APP_BUILD: true
+  - SKIP_API_BUILD: true
+  - DEPLOYMENT_TOKEN: <hidden>
+  - APP_LOCATION: /work/repo/dist
+  - API_LOCATION: <undefined>
+  - DATA_API_LOCATION: <undefined>
+  - CONFIG_FILE_LOCATION: /work/repo/public
+  - VERBOSE: true
+  - FUNCTION_LANGUAGE: node
+  - FUNCTION_LANGUAGE_VERSION: 22
+- Preparing deployment. Please wait...
+ℹ DeploymentId: d2be1cc2-1380-4de1-837a-42b0a15e24ea
+ℹ [37mVerbose logging enabled[0m
+ℹ [37mTry to validate location at: '/work/repo/work/repo/dist'.[0m
+ℹ [37mBuild timeout not specified, defaulting to 15 minutes[0m
+ℹ [37mApp Directory Location: '/work/repo/dist' was found.[0m
+ℹ [37mTry to validate location at: '/work/repo/swa-db-connections'.[0m
+ℹ [37mTry to validate location at: '/work/repo/work/repo/public/staticwebapp.config.json'.[0m
+ℹ [37mconfig_file_location: config file '/work/repo/public/staticwebapp.config.json' was found.[0m
+ℹ [37mLooking for event info[0m
+ℹ [37mCould not get event info. Proceeding[0m
+ℹ [37mSkipping step to build /work/repo/dist with Oryx[0m
+ℹ [37mDidn't find Oryx manifest file under location: /work/repo/d2be1cc2-1380-4de1-837a-42b0a15e24ea-swa-oryx/app-manifest/oryx-manifest.toml[0m
+ℹ [37mDetermined default file to be: index.html[0m
+ℹ [37mUsing 'staticwebapp.config.json' file for configuration information, 'routes.json' will be ignored.[0m
+ℹ [37mCalculating the size of app artifacts: 260390 B[0m
+ℹ [37mNo Api directory specified. Azure Functions will not be created.[0m
+ℹ [33mEither no Api directory was specified, or the specified directory was not found. Azure Functions will not be created.[0m
+ℹ [37mZipping App Artifacts[0m
+ℹ [37mApp Zip will be created from directory: /work/repo/dist[0m
+ℹ [37mDone Zipping App Artifacts[0m
+ℹ [37mUploading build artifacts.[0m
+ℹ [37mSkipping function upload as functions are identical to last successful deployment.[0m
+ℹ [32mFinished Upload. Polling on deployment.[0m
+ℹ [37mStatus: InProgress. Time: 0.8688965(s)[0m
+ℹ [37mStatus: Succeeded. Time: 16.7711658(s)[0m
+ℹ [32mDeployment Complete :)[0m
+ℹ [37mThanks for using Azure Static Web Apps![0m
+✔ Project deployed to https://calm-ground-0eac64610.7.azurestaticapps.net[0m 🚀
+
+== dns med-handoff-card.sociobot.in -> calm-ground-0eac64610.7.azurestaticapps.net
+== custom domain (registration retries until the CNAME is visible to Azure)
+   domain status: Ready
+== waiting for managed TLS on med-handoff-card.sociobot.in (SWA issues the certificate a few minutes after the domain is Ready)
+   https://med-handoff-card.sociobot.in -> 200

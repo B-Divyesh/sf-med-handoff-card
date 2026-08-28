@@ -1,0 +1,63 @@
+
+> med-handoff-card@1.0.0 test
+> npm run test:unit && npm run test:browser
+
+
+> med-handoff-card@1.0.0 test:unit
+> vitest run
+
+
+ RUN  v3.2.7 /tmp/med-handoff-polish-1.hBM1rb/repo
+
+ ✓ src/logic.test.ts (3 tests) 6ms
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  21:39:18
+   Duration  1.04s (transform 70ms, setup 0ms, collect 68ms, tests 6ms, environment 422ms, prepare 76ms)
+
+
+> med-handoff-card@1.0.0 test:browser
+> playwright test
+
+[WebServer] (node:8181) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:8212) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 28 tests using 1 worker
+
+(node:8230) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:8230) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [chromium] › tests/claims.spec.ts:27:1 › @claim:demo-entry opens the complete isolated sample in one click (698ms)
+  ✓   2 [chromium] › tests/claims.spec.ts:41:1 › @claim:demo-isolation sample changes never enter the real record (1.5s)
+  ✓   3 [chromium] › tests/claims.spec.ts:68:1 › @claim:offline-reload demo reloads after the connection is removed (805ms)
+  ✓   4 [chromium] › tests/claims.spec.ts:82:1 › @claim:local-only complete demo flow sends no request off origin (733ms)
+  ✓   5 [chromium] › tests/claims.spec.ts:96:1 › @claim:json-csv-export exports a JSON backup and populated CSV (494ms)
+  ✓   6 [chromium] › tests/claims.spec.ts:109:1 › @claim:encrypted-backup creates an AES-GCM passphrase backup locally (673ms)
+  ✓   7 [chromium] › tests/claims.spec.ts:127:1 › @claim:qr-handoff creates an interpretable handoff QR in the browser (750ms)
+  ✓   8 [chromium] › tests/claims.spec.ts:140:1 › @claim:qr-contents includes the complete readable selected-date handoff (4.6s)
+  ✓   9 [chromium] › tests/claims.spec.ts:163:1 › @claim:print-handoff fits eight medications on one A4 or Letter page (779ms)
+  ✓  10 [chromium] › tests/claims.spec.ts:192:1 › @claim:free-tools exposes every handoff tool without a checkout (377ms)
+  ✓  11 [chromium] › tests/claims.spec.ts:209:1 › @claim:current-medication-list retains complete regimen details after reload (709ms)
+  ✓  12 [chromium] › tests/claims.spec.ts:218:1 › @claim:dose-state-notes retains a held dose and caregiver note after reload (826ms)
+  ✓  13 [chromium] › tests/claims.spec.ts:228:1 › @claim:real-record-retention keeps a saved real medication after reload (688ms)
+  ✓  14 [chromium] › tests/claims.spec.ts:235:1 › @claim:regimen-history records the prior and new regimen (921ms)
+  ✓  15 [chromium] › tests/claims.spec.ts:248:1 › @claim:stopped-history retains the dose and regimen trail after the last medication stops (1.3s)
+  ✓  16 [chromium] › tests/claims.spec.ts:270:1 › @claim:no-future-doses rejects future dates before a dose can be recorded (869ms)
+  ✓  17 [chromium] › tests/claims.spec.ts:289:1 › @claim:delete-record erases the real record without affecting the demo sample (983ms)
+  ✓  18 [chromium] › tests/quality.spec.ts:5:1 › desktop and mobile have one heading, no console errors, and no serious axe findings (3.2s)
+  ✓  19 [chromium] › tests/quality.spec.ts:23:1 › dark mode has no serious axe findings (1.4s)
+  ✓  20 [chromium] › tests/quality.spec.ts:30:1 › 390px interactive targets are at least 44 by 44 CSS pixels (254ms)
+  ✓  21 [chromium] › tests/quality.spec.ts:43:1 › keyboard opens the medication dialog, focuses its label, and announces errors (516ms)
+  ✓  22 [chromium] › tests/quality.spec.ts:55:1 › keyboard reaches and activates Import backup (442ms)
+  ✓  23 [chromium] › tests/quality.spec.ts:68:1 › invalid backup, blank required fields, dialog naming, and focus recovery are safe (913ms)
+  ✓  24 [chromium] › tests/quality.spec.ts:92:1 › demo appearance preference stays in the demo storage namespace (468ms)
+  ✓  25 [chromium] › tests/quality.spec.ts:101:1 › static response policy declares CSP, immutable assets, manifest MIME, and a 404 (59ms)
+  ✓  26 [chromium] › tests/quality.spec.ts:121:1 › real routes update metadata, share chrome, announce navigation, and restore heading focus (668ms)
+  ✓  27 [chromium] › tests/quality.spec.ts:150:1 › mobile navigation and 200 percent text do not overflow (388ms)
+  ✓  28 [chromium] › tests/quality.spec.ts:160:1 › a waiting service worker is told to activate before the app reloads (1.8s)
+
+  28 passed (33.9s)

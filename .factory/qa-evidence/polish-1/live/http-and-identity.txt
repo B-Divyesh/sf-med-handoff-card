@@ -1,0 +1,29 @@
+/ 200 text/html
+/demo 200 text/html
+/privacy 200 text/html
+/terms 200 text/html
+/robots.txt 200 text/plain
+/sitemap.xml 200 text/xml
+/icons/apple-touch-icon.png 200 image/png
+/missing-polish-route 404 text/html
+JS=/assets/main-C_8-DRGK.js CSS=/assets/main-CXO0BZrb.css
+dist/live SHA-256
+0c1c8d0b87bc0a32724d800098a51e5fa3f5f3ae9ffc0927dbd8dcfb4652651a  dist/index.html
+7d4f59fa55e3c9376dc68b6a0e70f796385dbe7b4683ea34de7f6a4168f12f45  dist/sw.js
+80634958a81cc3fbe8560434756d2b32ddb9e22b992e16874484dc7cb407c421  dist/assets/main-C_8-DRGK.js
+5af50378c3cc76fb2c3585fcbd9211225fa93b03400f1c2b602205ec78062b48  dist/assets/main-CXO0BZrb.css
+0c1c8d0b87bc0a32724d800098a51e5fa3f5f3ae9ffc0927dbd8dcfb4652651a  -
+7d4f59fa55e3c9376dc68b6a0e70f796385dbe7b4683ea34de7f6a4168f12f45  -
+80634958a81cc3fbe8560434756d2b32ddb9e22b992e16874484dc7cb407c421  -
+5af50378c3cc76fb2c3585fcbd9211225fa93b03400f1c2b602205ec78062b48  -
+root headers
+cache-control: public, must-revalidate, max-age=30
+strict-transport-security: max-age=10886400; includeSubDomains; preload
+referrer-policy: no-referrer
+x-content-type-options: nosniff
+content-security-policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; worker-src 'self'
+permissions-policy: camera=(), microphone=(), geolocation=(), payment=()
+x-frame-options: DENY
+asset headers
+content-type: text/javascript
+cache-control: public, max-age=31536000, immutable
