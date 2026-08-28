@@ -1,72 +1,34 @@
-# Med Handoff Card — polish round 1 handoff
+# Med Handoff Card — review 2 handoff
 
-## Release status
+## Status
 
-**PASS.** All 23 findings from adversarial review 1 are repaired, tested, pushed, and deployed at <https://med-handoff-card.sociobot.in>. The artifact remains a static, local-first offline PWA with `dist/index.html` at its root.
+**FAIL — review only.** No product code was modified. The reviewer wrote and
+committed `.factory/review-2.md` with three remaining minor copy findings:
+F-2-1 through F-2-3.
 
-- Implementation commit: `a40ab948062ccf676eea3366ceea191d5978b6d4`
-- Deployment: `d2be1cc2-1380-4de1-837a-42b0a15e24ea`
+## What was verified
 
-The complete finding-by-finding closure map is in `.factory/polish-1.md`.
+- Cold live visits at 390 × 844 and 1440 × 900 made the job, audience, and
+  first sample action clear without scrolling.
+- The one-click live demo immediately showed realistic sample data. Reset
+  restored it, demo changes did not create an IndexedDB record, Start for real
+  did not carry sample changes into the real board, and observed requests were
+  same-origin only.
+- Every command in `.factory/claims.json` was run separately in a fresh clone
+  after `npm ci`: all 17 claim tests passed.
+- The fresh clone also passed `npm test` (3 unit tests and 28 Chromium tests)
+  and `npm run build`.
+- Live route/metadata/404/back-button/focus checks, request logging, offline
+  demo reload, mobile overflow, console checks, and live axe checks passed.
+- All 23 findings from review 1 were independently checked as fixed; the
+  detailed closure table is in `.factory/review-2.md`.
 
-## What changed
+## Remaining work
 
-- Rewrote the first screen in one medication vocabulary and made **Try it with sample data** open the isolated `/?demo=1` sample in one click.
-- Added complete route metadata and multi-page build entries for Demo, Privacy, Terms, and the designed HTTP 404.
-- Added History API routing, route announcements, heading focus, Back/Forward focus, and scroll restoration.
-- Unified the bedside-print masthead, footer, navigation, appearance control, provenance, legal links, and build ID on every route.
-- Added a 180×180 apple-touch icon.
-- Added a confirmed in-app record deletion action on Privacy.
-- Replaced vague or technical copy, defined the print promise by its exact fixture, and expanded the claims registry to 17 independently tagged tests.
-- Kept the original paper, cobalt, marigold, rose, Georgia, halftone, square-rule, and stamped-control identity. Mobile now retains the full navigation in a ruled second row.
+1. Replace the vague “Hand it over.” instruction with a concrete action.
+2. Make the semantic How it works `h2` name the three-step section.
+3. Remove or rewrite the public README’s IndexedDB/AES-GCM implementation
+   jargon in plain language.
 
-## Exact verification
-
-A fresh clone of implementation commit `a40ab948062ccf676eea3366ceea191d5978b6d4` ran:
-
-```sh
-npm ci
-# Every command in .factory/claims.json, separately
-npm test
-npm run test:type
-npm run lint
-npm run build
-```
-
-Results:
-
-- All 17 claim commands: PASS, exactly one tagged test per claim.
-- `npm test`: PASS — 3 Vitest unit tests and 28 Chromium browser tests.
-- Type-check and lint: PASS.
-- Production build: PASS.
-- JavaScript: 54.12 KB raw / 19.99 KB gzip.
-- CSS: 14.63 KB raw / 4.13 KB gzip.
-- Hero WebP: 170.45 KB.
-- Local Lighthouse home: 99 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 2.1 s, TBT 30 ms, CLS 0.
-- Live Lighthouse home: 100 in all four categories; LCP 1.8 s, TBT 0 ms, CLS 0.
-- Local and live factory URL verifier: PASS.
-- Integrated axe: zero serious or critical findings in light and dark views.
-- Live 390 px and simulated 200% text: no horizontal overflow; every visible interactive target at least 44 px.
-- Live privacy trace: no analytics, accounts, third-party code, product APIs, or cross-origin requests.
-- Live PWA: the full sample reloads offline under service-worker control.
-- Live routing: root, Demo, Privacy, and Terms return 200; unknown URL returns the designed HTTP 404; Back/Forward restores heading focus.
-- Live QR decode: selected date, Nora Ellis, all three medications, and all three recorded dose states present in readable data.
-- Live deletion: confirmed deletion remains empty after reload; demo sample remains separate.
-- Live artifact hashes match `dist/` exactly.
-
-Evidence is under `.factory/qa-evidence/polish-1/`. Screenshots are in its `screenshots/` and `live/screenshots/` folders.
-
-## Run and deploy
-
-```sh
-npm ci
-npm test
-npm run test:type
-npm run lint
-npm run build
-/opt/fleet/lib/deploy-static.sh med-handoff-card dist
-```
-
-## Known gaps and next steps
-
-None. No review finding of any severity remains unresolved. No backend, account, payment, AI, or third-party runtime service is used.
+After those edits, rerun the complete review checklist rather than a
+diff-only check.
