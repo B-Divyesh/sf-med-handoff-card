@@ -25,7 +25,7 @@ let demoMode = isDemoUrl()
 const themeKey = () => demoMode ? 'demo:mhc_theme' : 'mhc_theme'
 let theme = localStorage.getItem(themeKey()) || 'light'
 let focusAfterRender = ''
-const BUILD_ID = '2026.08.28-polish.1'
+const BUILD_ID = '2026.08.28-polish.2'
 
 async function save(next = data) {
   data = next
@@ -68,7 +68,7 @@ function emptyBoard() {
 }
 
 function howItWorks() {
-  return `<section class="how" aria-labelledby="how-heading"><p class="eyebrow">How it works</p><h2 id="how-heading">Leave the next caregiver a clear record</h2><ol><li><strong>Add the current medication list.</strong><span>Enter each medication, amount, and scheduled time.</span></li><li><strong>Mark each dose.</strong><span>Choose Taken, Held, or Unknown and add a note.</span></li><li><strong>Hand it over.</strong><span>Print the card, show a QR handoff, or export a backup.</span></li></ol></section>`
+  return `<section class="how" aria-labelledby="how-heading"><p class="eyebrow">How it works</p><h2 id="how-heading">Create a medication handoff in three steps</h2><ol><li><strong>Add the current medication list.</strong><span>Enter each medication, amount, and scheduled time.</span></li><li><strong>Mark each dose.</strong><span>Choose Taken, Held, or Unknown and add a note.</span></li><li><strong>Print, share, or back up the handoff.</strong><span>Print for the next caregiver, show the QR code in person, or save a backup for yourself.</span></li></ol></section>`
 }
 
 function slotBoard(slot: Slot) {

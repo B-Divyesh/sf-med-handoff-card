@@ -51,10 +51,6 @@ Use **Delete this record** on the Privacy page to erase the local medication rec
 
 Confirm unclear medication instructions with the prescriber or pharmacist.
 
-## Technical notes
-
-The app stores real records in IndexedDB. Optional encrypted backups use AES-GCM with a key derived from the supplied passphrase.
-
 ## Deploy
 
 This is a static progressive web app. The factory deploys `dist/` to Azure Static Web Apps with `public/staticwebapp.config.json`.

@@ -2,6 +2,15 @@ import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 import { readFile, writeFile } from 'node:fs/promises'
 
+test('how-to heading and third step name the caregiver actions', async ({ page }) => {
+  await page.goto('/')
+  const section = page.locator('.how')
+  await expect(section.getByRole('heading', { name: 'Create a medication handoff in three steps' })).toBeVisible()
+  await expect(section.locator('li').nth(2)).toContainText('Print, share, or back up the handoff.')
+  await expect(section.locator('li').nth(2)).toContainText('Print for the next caregiver, show the QR code in person, or save a backup for yourself.')
+  await expect(section).not.toContainText('Hand it over.')
+})
+
 test('desktop and mobile have one heading, no console errors, and no serious axe findings', async ({ browser }) => {
   for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
     const context = await browser.newContext({ viewport })

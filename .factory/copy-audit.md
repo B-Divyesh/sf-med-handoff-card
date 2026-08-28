@@ -1,6 +1,6 @@
 # Copy audit
 
-Audited 2026-08-28 for polish round 1. Counts use whitespace-delimited words. No sentence exceeds 22 words. No banned marketing word appears.
+Audited 2026-08-28 for polish round 2. Counts use whitespace-delimited words. No sentence exceeds 22 words. No banned marketing word appears.
 
 ## First screen
 
@@ -24,8 +24,8 @@ The headline names the job in six words. The audience sentence names the situati
 | Enter each medication, amount, and scheduled time. | 7 |
 | Mark each dose. | 3 |
 | Choose Taken, Held, or Unknown and add a note. | 9 |
-| Hand it over. | 3 |
-| Print the card, show a QR handoff, or export a backup. | 11 |
+| Print, share, or back up the handoff. | 7 |
+| Print for the next caregiver, show the QR code in person, or save a backup for yourself. | 16 |
 | Print the shift card, show its QR code to another caregiver, or save your own backup. | 16 |
 | A QR handoff contains the selected date, current medication list, and dose states. | 13 |
 | Anyone who scans it can read it, so share it only with someone you trust. | 14 |
