@@ -1,7 +1,7 @@
 # Independent verification — FAIL
 
-Candidate: 1a9aa597d3de2d1e41ee413c5b9c9d893773a28e  
-Live URL: https://med-handoff-card.sociobot.in  
+Candidate: 1a9aa597d3de2d1e41ee413c5b9c9d893773a28e
+Live URL: https://med-handoff-card.sociobot.in
 Verified: 2026-08-28 after a fresh npm ci install at the requested commit
 
 ## Release decision
