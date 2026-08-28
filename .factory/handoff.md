@@ -1,46 +1,39 @@
-# Med Handoff Card — independent verification handoff
+# Med Handoff Card — repair handoff
 
-## Release status: FAIL
+## Release status: repaired and ready to deploy
 
-Candidate `a0605682d1f662b9934a85fea10ecef6e42082f3` was independently verified
-against `https://med-handoff-card.sociobot.in` on 2026-08-28 UTC. The live app
-matches the candidate build, but it is not release-ready. Full evidence and
-reproduction details are in `.factory/verification-2.md`.
+This repair starts from verifier failure `1ce8b3094f717ca8fd7586efe50e971e5e08bdd1`
+for candidate `a0605682d1f662b9934a85fea10ecef6e42082f3`.
+Implementation repair commit: `9f8d96325519f86a117937ced4dd13b37d5fac3c`.
 
-## What passed
+## What changed
 
-- All eight commands in `.factory/claims.json` passed individually from the
-  demo entry point.
-- `npm ci`, `npm test`, `npm run test:type`, `npm run lint`, and `npm run build`
-  passed; `dist/` was produced.
-- The mandatory cold first screen and one-click sample demo passed.
-- Default light-mode desktop/mobile axe, keyboard operation, 44 px targets,
-  200% text reflow, reduced motion, normal offline reload, service-worker update
-  handling, request privacy, headers, caching, and byte budgets passed.
-- Fresh live Lighthouse mobile: 93 performance and 100 for accessibility, best
-  practices, and SEO; LCP 1.20 s and CLS 0.
-- Candidate/live hashes match for all deployable artifacts checked.
+- Backup data is structurally validated before it can replace IndexedDB. Invalid
+  files are rejected with a recoverable in-app error. Valid legacy exports are
+  normalized to include an empty regimen-history list.
+- Required medication name and amount are trimmed and rejected when blank.
+- Medication edits now add immutable regimen-change events with the old and new
+  amount, directions, and schedule. The event is shown in Today’s updates.
+- QR payload version 2 includes a stable `medicationId` on every regimen item,
+  matching each dose record. The browser regression decodes the generated QR
+  image and validates that mapping.
+- The service worker never writes navigation responses into `/index.html`.
+  Only `/` and `/demo` use the precached app shell as an offline fallback.
+- Dark selected-control and primary-brand colors meet the axe contrast gate.
+- Demo appearance uses `demo:mhc_theme`, separate from the real `mhc_theme`
+  preference. The banner now says exactly what is isolated.
+- The medication dialog has an accessible name and successful save moves focus
+  to a logical board heading.
+- Privacy, Terms, and 404 now use the shared header, navigation, footer, and
+  build marker. `public/social-card.svg` is an original 1200 × 630 social
+  preview derived from the bedside-print visual system.
+- Claims now cover current regimen details, state/note retention, IndexedDB
+  retention, and regimen-change history in addition to strengthened offline and
+  QR checks.
 
-## Release blockers
+## Verification
 
-- A structurally malformed backup is persisted, then crashes every render and
-  reload with no in-app recovery.
-- Whitespace-only medication name and amount create a blank scheduled dose.
-- Editing a regimen erases its old amount/schedule and produces no regimen
-  change history.
-- QR dose records use IDs omitted from regimen entries, so real dose states are
-  not reliably attributable to medicines.
-- Visiting Privacy can overwrite the cached app shell; a fresh offline demo URL
-  can then show the Privacy page instead of the board.
-- Dark mode has serious axe contrast failures (1.22:1 and 1.85:1).
-- Claims coverage misses core persistence/state promises and does not catch the
-  false offline/QR behavior.
-
-Medium findings cover demo theme persistence into the real namespace, unnamed
-dialog/focus loss after save, and missing standard header/footer/social-preview
-requirements on secondary pages.
-
-## How to reproduce the baseline
+Run from a clean checkout with Node 20+:
 
 ```sh
 npm ci
@@ -50,13 +43,33 @@ npm run lint
 npm run build
 ```
 
-Run each exact command in `.factory/claims.json` separately. Browser evidence,
-screenshots, Lighthouse JSON, and helper output are under
-`.factory/qa-evidence/verification-2-*` and
-`.factory/qa-evidence/verification2-live-*`.
+The final clean run passed 3 Vitest tests and 20 Chromium browser tests,
+including 390 px/mobile, desktop, keyboard dialog flow, focus recovery,
+light/dark axe checks, text/target checks, privacy requests, offline after
+visiting Privacy, and service-worker update activation. All 12 declared claim
+commands pass individually through `npm run test:claims -- --grep
+"@claim:<id>"`.
 
-## Next step
+Build output is `dist/`: 48.81 KB JavaScript (18.55 KB gzip), 13.10 KB CSS
+(3.82 KB gzip), and 170.45 KB WebP hero art. No package-consumer test applies:
+this is a static offline PWA, not a published library.
 
-Fix every Critical and High defect, add regression claim tests that decode and
-validate QR output and exercise offline navigation after secondary routes, then
-repeat independent verification. No product code was changed during this QA.
+Local release checks also passed:
+
+- `/opt/fleet/lib/verify-url.sh http://127.0.0.1:4173/demo
+  .factory/qa-evidence/repair-3-verify-url` — title, `lang`, one `h1`, main,
+  image alt text, labeled controls, and zero errors.
+- `npx @axe-core/cli` against local `/demo` — 0 violations. Evidence:
+  `.factory/qa-evidence/repair-3-axe.json`.
+- Playwright AxeBuilder covers the same demo in light and dark themes with zero
+  serious or critical violations.
+
+## Deployment and known gaps
+
+Artifact class remains `pwa-offline`; deployment remains static `dist/` via the
+repository’s Azure Static Web Apps configuration. No infrastructure, DNS,
+billing, accounts, analytics, third-party runtime services, AI calls, or paid
+features were added.
+
+No known release blockers remain. After the factory deployment completes, use
+the live `/demo` URL for the final byte-identity and response-header check.
