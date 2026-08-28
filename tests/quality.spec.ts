@@ -11,6 +11,7 @@ test('desktop and mobile have one heading, no console errors, and no serious axe
     page.on('pageerror', error => errors.push(error.message))
     await page.goto('/demo')
     await expect(page.locator('h1')).toHaveCount(1)
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://med-handoff-card.sociobot.in/demo')
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width)
     const results = await new AxeBuilder({ page }).analyze()
     expect(results.violations.filter(item => item.impact === 'serious' || item.impact === 'critical')).toEqual([])

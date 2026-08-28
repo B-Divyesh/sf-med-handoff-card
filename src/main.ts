@@ -93,6 +93,7 @@ function render() {
   const path = currentPath()
   const boardPath = path === '/' || path === '/demo'
   document.title = path === '/privacy' ? 'Privacy — Med Handoff Card' : path === '/terms' ? 'Terms — Med Handoff Card' : demoMode ? 'Demo — Med Handoff Card' : boardPath ? 'Med Handoff Card — track caregiver dose handoffs' : 'Page not found — Med Handoff Card'
+  document.querySelector<HTMLLinkElement>('link[rel="canonical"]')!.href = `https://med-handoff-card.sociobot.in${path === '/' ? '/' : path}`
   app.innerHTML = htmlShell(path === '/privacy' ? legal('privacy') : path === '/terms' ? legal('terms') : boardPath ? board() : notFound())
 }
 
