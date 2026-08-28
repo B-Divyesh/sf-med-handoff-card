@@ -43,6 +43,10 @@ Motion is limited to a 180ms stamp settle (opacity/transform); reduced motion
 uses an instant change. Focus is a 3px cobalt offset ring. Both themes are
 supported; the app honours system theme and offers a saved manual choice.
 
+The demo uses a flat marigold proof strip above the masthead. It reads like a
+temporary chart tab and keeps the sample boundary visible without changing the
+board's hierarchy. Its square controls follow the same stamped-paper grammar.
+
 ## Original imagery
 
 Art direction: a flat, editorial risograph-like illustration of an unbranded

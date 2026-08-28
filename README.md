@@ -1,60 +1,53 @@
 # Med Handoff Card
 
-Med Handoff Card is a private, offline-first shift record for an adult child or
-home caregiver coordinating an older relative’s medication schedule. It makes
-the current regimen and every scheduled dose legible at handoff: **Taken**,
-**Held**, or **Unknown**.
+Track scheduled doses and leave a clear medication handoff for the next family caregiver.
 
-It is deliberately not a reminder app, interaction checker, refill service, or
-source of medical advice. Confirm unclear instructions with the prescriber or
-pharmacist.
+The app records each dose as **Taken**, **Held**, or **Unknown**. It is a caregiver record, not medical advice.
+
+[Try it with sample data](https://med-handoff-card.sociobot.in/demo). The demo is isolated from your real record.
 
 ## What it does
 
-- Keeps a current medication list with dose, directions, and time of day.
-- Gives each scheduled dose an unambiguous state and optional caregiver note.
-- Prints a concise one-page handoff and makes a local QR handoff for a trusted
-  recipient.
-- Stores data in IndexedDB on the device; works after the first visit without a
-  connection.
-- Exports JSON and CSV; an optional JSON export is encrypted locally with a
-  passphrase using AES-GCM.
-- Includes a $9 one-time Plus unlock for separate named profiles on a shared
-  device. Core records, printing, QR handoff, and exports remain free.
+- Keeps a current medication list with amounts, directions, and times.
+- Records a dose state and optional caregiver note.
+- Prints a handoff and creates a local QR handoff.
+- Works offline after the first visit.
+- Stores the real record in IndexedDB in your browser.
+- Exports JSON and CSV backups.
+- Encrypts an optional JSON backup locally with AES-GCM and your passphrase.
 
-## Run locally
+The app uses no analytics or third-party runtime scripts.
 
-Requires Node 20+.
+## Run and verify
 
-```sh
-npm install
-npm run dev
-```
-
-Open the local URL Vite reports. To make a deployable build:
+Use Node 20 or newer and Playwright 1.58.2.
 
 ```sh
-npm run build
-```
-
-The static deploy output is `dist/` and contains `index.html` at its root.
-
-## Verify
-
-```sh
+npm ci
 npm test
+npm run test:type
+npm run lint
 npm run build
 npm run preview
 ```
 
-The app has no analytics or third-party runtime scripts. See `/privacy` and
-`/terms` in the app for local-data and safety details.
+The production output is `dist/`, with `index.html` at its root. The browser suite covers desktop, 390 px mobile, keyboard use, axe, privacy, claims, offline reload, and service-worker updates.
 
-## Data ownership and safety
+Run one claim with its ID:
 
-Medication records are sensitive. They stay in the browser unless you print,
-export, import, or deliberately show a QR code. QR data is not encrypted.
-Encrypted exports cannot be recovered without their passphrase.
+```sh
+npm run test:claims -- --grep "@claim:offline-reload"
+```
+
+## Data and safety
+
+Medication records stay in this browser unless you print, export, import, or show a QR code. QR handoffs are not encrypted. Encrypted exports cannot be recovered without their passphrase.
+
+See `/privacy` and `/terms` for the full policy. Confirm unclear medication instructions with the prescriber or pharmacist.
+
+## Deploy
+
+This is a static PWA. The factory deploys `dist/` to Azure Static Web Apps with `public/staticwebapp.config.json`.
 
 ## License
 

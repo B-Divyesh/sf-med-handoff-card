@@ -7,3 +7,5 @@ graphify-out/
 node_modules/
 dist/
 *.tsbuildinfo
+test-results/
+.factory/qa-evidence/playwright-report/
