@@ -1,0 +1,46 @@
+{
+  "candidate": "a0605682d1f662b9934a85fea10ecef6e42082f3",
+  "liveUrl": "https://med-handoff-card.sociobot.in",
+  "malformedImport": {
+    "input": {"personName":"QA","shiftNote":"","medications":[{"active":true}],"logs":[]},
+    "persisted": true,
+    "pageErrors": [
+      "Cannot read properties of undefined (reading 'includes')",
+      "Cannot read properties of undefined (reading 'includes')"
+    ],
+    "renderedBodyPrefix": "Skip to handoff board"
+  },
+  "blankMedication": {
+    "nameInput": "three spaces",
+    "doseInput": "three spaces",
+    "schedule": "Morning",
+    "dialogClosed": true,
+    "toast": "Saved on this device.",
+    "renderedDoseText": "",
+    "renderedRegimenText": "· Morning"
+  },
+  "regimenChange": {
+    "before": "Test medicine, 5 mg, Morning; marked Taken",
+    "after": "Test medicine, 10 mg, Evening",
+    "oldAmountStillRendered": false,
+    "history": "Taken Test medicine · Morning — given before change",
+    "regimenChangeEventRendered": false
+  },
+  "offlineAfterPrivacy": {
+    "cachedIndexIsPrivacyDocument": true,
+    "requestedOfflineUrl": "https://med-handoff-card.sociobot.in/demo?cache-bust=verification-2",
+    "renderedTitle": "Privacy — Med Handoff Card",
+    "renderedH1": "Privacy, plainly.",
+    "demoRecipientCount": 0
+  },
+  "demoPreferenceLeak": {
+    "action": "Switch to dark appearance in /demo",
+    "sharedLocalStorage": {"mhc_theme":"dark"},
+    "valueRemainsAfterStartForReal": true
+  },
+  "dialogFocus": {
+    "accessibleName": "",
+    "activeElementAfterSuccessfulSaveAndBoardRender": "BODY"
+  },
+  "representativeInteractionMs": 32
+}

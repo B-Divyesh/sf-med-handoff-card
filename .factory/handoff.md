@@ -1,64 +1,62 @@
-# Med Handoff Card — repair handoff
+# Med Handoff Card — independent verification handoff
 
-## Release status: PASS — deployed
+## Release status: FAIL
 
-Repaired the release blockers reported in verifier commit `c64a14a838688927712a65805196204ac77c8788` for candidate `1a9aa597d3de2d1e41ee413c5b9c9d893773a28e`.
+Candidate `a0605682d1f662b9934a85fea10ecef6e42082f3` was independently verified
+against `https://med-handoff-card.sociobot.in` on 2026-08-28 UTC. The live app
+matches the candidate build, but it is not release-ready. Full evidence and
+reproduction details are in `.factory/verification-2.md`.
 
-## What changed
+## What passed
 
-- Added a first-screen **Try it with sample data** action and `/demo` route. The realistic Nora Ellis sample is created in memory and cannot read or write the real IndexedDB record.
-- Added the persistent demo banner, working **Reset demo** and **Start for real** controls, and `.factory/demo.md`.
-- Added `.factory/claims.json` with eight claims. Each has exactly one tagged Playwright test against `/demo`.
-- Rewrote the cold first screen to name adult children and home caregivers, state the job, explain the next click, and list three tested facts.
-- Removed the unimplemented $9 Plus profile offer, checkout, token storage, and verification request. The product no longer takes payment or promises profiles.
-- Added CSP and privacy headers, immutable hashed-asset caching, correct webmanifest MIME, `robots.txt`, `sitemap.xml`, Azure Static Web Apps configuration, and a designed HTTP 404 response.
-- Raised mobile targets to at least 44 × 44 CSS px.
-- Changed service-worker updates to wait, show **Install update**, post `skip-waiting`, and reload only after `controllerchange`.
-- Updated README, privacy, terms, design notes, and the plain-words copy audit.
+- All eight commands in `.factory/claims.json` passed individually from the
+  demo entry point.
+- `npm ci`, `npm test`, `npm run test:type`, `npm run lint`, and `npm run build`
+  passed; `dist/` was produced.
+- The mandatory cold first screen and one-click sample demo passed.
+- Default light-mode desktop/mobile axe, keyboard operation, 44 px targets,
+  200% text reflow, reduced motion, normal offline reload, service-worker update
+  handling, request privacy, headers, caching, and byte budgets passed.
+- Fresh live Lighthouse mobile: 93 performance and 100 for accessibility, best
+  practices, and SEO; LCP 1.20 s and CLS 0.
+- Candidate/live hashes match for all deployable artifacts checked.
 
-The existing medication list, Taken/Held/Unknown workflow, notes, history, QR, print, JSON/CSV, encryption, import, IndexedDB schema, dark theme, and offline behavior were retained.
+## Release blockers
 
-## Exact verification evidence
+- A structurally malformed backup is persisted, then crashes every render and
+  reload with no in-app recovery.
+- Whitespace-only medication name and amount create a blank scheduled dose.
+- Editing a regimen erases its old amount/schedule and produces no regimen
+  change history.
+- QR dose records use IDs omitted from regimen entries, so real dose states are
+  not reliably attributable to medicines.
+- Visiting Privacy can overwrite the cached app shell; a fresh offline demo URL
+  can then show the Privacy page instead of the board.
+- Dark mode has serious axe contrast failures (1.22:1 and 1.85:1).
+- Claims coverage misses core persistence/state promises and does not catch the
+  false offline/QR behavior.
 
-- `npm ci` — 127 packages installed; 0 audit vulnerabilities.
-- `npm test` — PASS: 2 Vitest unit tests and 13 Chromium tests.
-- `npm run test:claims` — PASS: all 8 claim tests.
-- `npm run test:type` — PASS.
-- `npm run lint` — PASS.
-- `npm run build` — PASS; `dist/index.html` exists.
-- Production sizes: JS 46.09 KB / 17.67 KB gzip; CSS 12.93 KB / 3.79 KB gzip; hero 170.45 KB.
-- Desktop 1280 × 900 and mobile 390 × 844 — one h1, no horizontal overflow, no console or page errors.
-- Playwright axe — 0 serious or critical issues on populated desktop and mobile demo states.
-- Keyboard — Enter opens the medication dialog, focus enters the medication-name field, and the schedule error is announced.
-- Mobile target audit — every visible link, button, input, textarea, and import label is at least 44 × 44 CSS px.
-- Privacy — a dose and QR demo flow made 0 cross-origin requests; no account or checkout control exists.
-- Offline — `/demo` reloaded with Nora Ellis after the browser context went offline.
-- Update — an actual changed worker reached `waiting`; the app exposed **Install update**, activated it, received `controllerchange`, and reloaded.
-- Azure SWA emulator — `/demo` 200; unknown route 404 with the designed page; manifest `application/manifest+json`; hashed JS `public, max-age=31536000, immutable`; root and assets include CSP.
-- `/opt/fleet/lib/verify-url.sh http://127.0.0.1:4280 .factory/qa-evidence/repair-swa-verify-url` — PASS in 624 ms with title, `lang=en`, one h1, main, alt text, labels, and 0 browser errors.
-- Lighthouse mobile on `/demo` — performance 100, accessibility 100, best practices 100, SEO 100; LCP 1.1 s, CLS 0, total blocking time 0 ms.
+Medium findings cover demo theme persistence into the real namespace, unnamed
+dialog/focus loss after save, and missing standard header/footer/social-preview
+requirements on secondary pages.
 
-## Live verification
-
-- Deployed product commit: `fb44e8e4`, pushed to `origin/main`.
-- Azure deployment: `6b0b02ba-a3b9-4255-bb9c-583b07379488`, status Succeeded.
-- Live URL: `https://med-handoff-card.sociobot.in`.
-- Live identity matches `dist`: index SHA-256 `cfae52cb929c7f461c309ad39bdb6d360c0280cd91bc29b99253719fc23bd4f6`; JS SHA-256 `b40f31c6d5e040eade0cc0051ad31a2103778ba547dc14cce1f07d52e4e353bf`; service worker SHA-256 `483848335f0ba8aee6c5d21a5bd827fc2e8e7ba0625fc0c2de9ba59fd6a0f468`.
-- Live response policy: `/demo` 200, unknown route 404, manifest MIME correct, hashed JS immutable, and CSP present on root, assets, and the 404.
-- Live 390 × 844 browser: banner present, canonical `/demo`, one h1, 0 px overflow, 0 serious/critical axe findings, 0 console errors, 0 external requests, and offline reload passed.
-- Live `verify-url.sh` — PASS in 807 ms with no browser errors.
-- Live Lighthouse mobile — performance 100, accessibility 100, best practices 100, SEO 100; LCP 1.1 s, CLS 0, total blocking time 70 ms.
-
-Evidence is in `.factory/qa-evidence/repair-*`, including the live Lighthouse and URL verification outputs.
-
-## Deploy
-
-Build with `npm run build`, then deploy the static `dist/` directory:
+## How to reproduce the baseline
 
 ```sh
-/opt/fleet/lib/deploy-static.sh med-handoff-card dist
+npm ci
+npm test
+npm run test:type
+npm run lint
+npm run build
 ```
 
-## Known gaps
+Run each exact command in `.factory/claims.json` separately. Browser evidence,
+screenshots, Lighthouse JSON, and helper output are under
+`.factory/qa-evidence/verification-2-*` and
+`.factory/qa-evidence/verification2-live-*`.
 
-No release-blocking gaps remain. Named profiles are not shipped or advertised; add them only with complete storage, UI, and billing tests in a future release.
+## Next step
+
+Fix every Critical and High defect, add regression claim tests that decode and
+validate QR output and exercise offline navigation after secondary routes, then
+repeat independent verification. No product code was changed during this QA.

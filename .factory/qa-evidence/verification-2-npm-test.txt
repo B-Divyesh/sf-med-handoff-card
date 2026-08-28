@@ -1,0 +1,48 @@
+
+> med-handoff-card@1.0.0 test
+> npm run test:unit && npm run test:browser
+
+
+> med-handoff-card@1.0.0 test:unit
+> vitest run
+
+
+ RUN  v3.2.7 /work/repo
+
+ ✓ src/logic.test.ts (2 tests) 23ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  18:13:08
+   Duration  1.77s (transform 62ms, setup 0ms, collect 55ms, tests 23ms, environment 567ms, prepare 233ms)
+
+
+> med-handoff-card@1.0.0 test:browser
+> playwright test
+
+[WebServer] (node:6663) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:6695) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 13 tests using 1 worker
+
+(node:6713) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:6713) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [chromium] › tests/claims.spec.ts:4:1 › @claim:demo-isolation sample changes never enter the real record (3.3s)
+  ✓   2 [chromium] › tests/claims.spec.ts:31:1 › @claim:offline-reload demo reloads after the connection is removed (1.0s)
+  ✓   3 [chromium] › tests/claims.spec.ts:42:1 › @claim:local-only complete demo flow sends no request off origin (1.2s)
+  ✓   4 [chromium] › tests/claims.spec.ts:56:1 › @claim:json-csv-export exports a JSON backup and populated CSV (792ms)
+  ✓   5 [chromium] › tests/claims.spec.ts:69:1 › @claim:encrypted-backup creates an AES-GCM passphrase backup locally (1.2s)
+  ✓   6 [chromium] › tests/claims.spec.ts:87:1 › @claim:qr-handoff creates the handoff QR in the browser (1.2s)
+  ✓   7 [chromium] › tests/claims.spec.ts:95:1 › @claim:print-handoff keeps the handoff and removes tools from print (895ms)
+  ✓   8 [chromium] › tests/claims.spec.ts:105:1 › @claim:free-tools exposes every handoff tool without a checkout (630ms)
+  ✓   9 [chromium] › tests/quality.spec.ts:5:1 › desktop and mobile have one heading, no console errors, and no serious axe findings (4.7s)
+  ✓  10 [chromium] › tests/quality.spec.ts:23:1 › 390px interactive targets are at least 44 by 44 CSS pixels (593ms)
+  ✓  11 [chromium] › tests/quality.spec.ts:36:1 › keyboard opens the medication dialog, focuses its label, and announces errors (1.1s)
+  ✓  12 [chromium] › tests/quality.spec.ts:48:1 › static response policy declares CSP, immutable assets, manifest MIME, and a 404 (82ms)
+  ✓  13 [chromium] › tests/quality.spec.ts:61:1 › a waiting service worker is told to activate before the app reloads (2.5s)
+
+  13 passed (27.6s)

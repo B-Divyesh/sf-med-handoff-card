@@ -1,0 +1,84 @@
+{
+  "desktopDemo": {
+    "axeSeriousCritical": 0,
+    "darkAxeSeriousCritical": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          {
+            "target": [
+              ".brand-mark"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.85 (foreground color: #ffffff, background color: #79c6ff, font size: 9.8pt (13px), font weight: bold). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              "div[aria-label=\"Lisinopril at Morning\"] > .selected[data-state=\"held\"][title=\"Mark Held\"] > span"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.22 (foreground color: #f8f1e1, background color: #ffd77b, font size: 8.5pt (11.36px), font weight: bold). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".selected[data-slot=\"Evening\"][data-state=\"held\"] > span"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.22 (foreground color: #f8f1e1, background color: #ffd77b, font size: 8.5pt (11.36px), font weight: bold). Expected contrast ratio of 4.5:1"
+          },
+          {
+            "target": [
+              ".primary"
+            ],
+            "summary": "Fix any of the following:\n  Element has insufficient color contrast of 1.85 (foreground color: #ffffff, background color: #79c6ff, font size: 12.0pt (16px), font weight: bold). Expected contrast ratio of 4.5:1"
+          }
+        ]
+      }
+    ],
+    "externalRequests": [],
+    "requestOrigins": [
+      "https://med-handoff-card.sociobot.in"
+    ],
+    "errors": [],
+    "downloads": [
+      "med-handoff-backup-2026-08-28.json",
+      "med-handoff-dose-log-2026-08-28.csv"
+    ]
+  },
+  "mobileOffline": {
+    "layout": {
+      "clientWidth": 390,
+      "scrollWidth": 390
+    },
+    "undersizedTargets": [],
+    "axeSeriousCritical": 0,
+    "reducedMotion": {
+      "animationName": "none",
+      "animationDuration": "0s"
+    },
+    "offlineStatus": 200,
+    "requestsWhileOnline": 9,
+    "errors": []
+  },
+  "realWorkflow": {
+    "skipFocus": {
+      "top": "12px",
+      "outlineWidth": "3px",
+      "outlineStyle": "solid"
+    },
+    "actionFocus": {
+      "outlineWidth": "3px",
+      "outlineStyle": "solid"
+    },
+    "invalidScheduleRecovery": true,
+    "specialCharactersEscaped": true,
+    "persistedMedication": true,
+    "persistedShiftNote": true,
+    "persistedDose": true,
+    "errors": []
+  },
+  "malformedImport": {
+    "bodyText": "Skip to handoff board",
+    "errors": [
+      "page: Cannot read properties of undefined (reading 'includes')",
+      "page: Cannot read properties of undefined (reading 'includes')"
+    ]
+  }
+}

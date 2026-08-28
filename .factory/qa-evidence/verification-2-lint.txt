@@ -1,0 +1,4 @@
+
+> med-handoff-card@1.0.0 lint
+> tsc -b --pretty false
+

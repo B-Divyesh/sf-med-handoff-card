@@ -1,0 +1,14 @@
+
+> med-handoff-card@1.0.0 build
+> tsc -b && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 59 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                           1.92 kB │ gzip:  0.68 kB
+dist/assets/handoff-tray-CQYaEVoZ.webp  170.45 kB
+dist/assets/index-C9kgVGuk.css           12.93 kB │ gzip:  3.79 kB
+dist/assets/index-RytapgcH.js            46.20 kB │ gzip: 17.71 kB
+✓ built in 802ms

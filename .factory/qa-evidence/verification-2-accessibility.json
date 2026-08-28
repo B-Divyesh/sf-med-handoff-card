@@ -1,0 +1,179 @@
+{
+  "routes": {
+    "/": {
+      "status": 200,
+      "title": "Med Handoff Card — track caregiver dose handoffs",
+      "lang": "en",
+      "h1": [
+        "Track medicine handoffs between family caregivers."
+      ],
+      "mainCount": 1,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Track medicine handoffs between family caregivers."
+        },
+        {
+          "level": 2,
+          "text": "Leave the next caregiver a clear record"
+        },
+        {
+          "level": 2,
+          "text": "Leave a clear record"
+        }
+      ],
+      "canonical": "https://med-handoff-card.sociobot.in/",
+      "missingAlt": 0,
+      "unlabeledButtons": 0,
+      "seriousCritical": [],
+      "errors": []
+    },
+    "/demo": {
+      "status": 200,
+      "title": "Demo — Med Handoff Card",
+      "lang": "en",
+      "h1": [
+        "Today’s handoff"
+      ],
+      "mainCount": 1,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Today’s handoff"
+        },
+        {
+          "level": 2,
+          "text": "What should the next person know?"
+        },
+        {
+          "level": 2,
+          "text": "Mark each scheduled dose"
+        },
+        {
+          "level": 3,
+          "text": "Morning"
+        },
+        {
+          "level": 3,
+          "text": "Noon"
+        },
+        {
+          "level": 3,
+          "text": "Evening"
+        },
+        {
+          "level": 3,
+          "text": "Bedtime"
+        },
+        {
+          "level": 2,
+          "text": "What is prescribed now"
+        },
+        {
+          "level": 2,
+          "text": "Leave a clear record"
+        },
+        {
+          "level": 2,
+          "text": "Today’s updates"
+        }
+      ],
+      "canonical": "https://med-handoff-card.sociobot.in/demo",
+      "missingAlt": 0,
+      "unlabeledButtons": 0,
+      "seriousCritical": [],
+      "errors": []
+    },
+    "/privacy": {
+      "status": 200,
+      "title": "Privacy — Med Handoff Card",
+      "lang": "en",
+      "h1": [
+        "Privacy, plainly."
+      ],
+      "mainCount": 1,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Privacy, plainly."
+        }
+      ],
+      "missingAlt": 0,
+      "unlabeledButtons": 0,
+      "seriousCritical": [],
+      "errors": []
+    },
+    "/terms": {
+      "status": 200,
+      "title": "Terms — Med Handoff Card",
+      "lang": "en",
+      "h1": [
+        "Terms for a practical handoff."
+      ],
+      "mainCount": 1,
+      "headings": [
+        {
+          "level": 1,
+          "text": "Terms for a practical handoff."
+        }
+      ],
+      "missingAlt": 0,
+      "unlabeledButtons": 0,
+      "seriousCritical": [],
+      "errors": []
+    },
+    "/qa-not-found": {
+      "status": 404,
+      "title": "Page not found — Med Handoff Card",
+      "lang": "en",
+      "h1": [
+        "This page is not on the handoff card."
+      ],
+      "mainCount": 1,
+      "headings": [
+        {
+          "level": 1,
+          "text": "This page is not on the handoff card."
+        }
+      ],
+      "missingAlt": 0,
+      "unlabeledButtons": 0,
+      "seriousCritical": [],
+      "errors": [
+        "console: Failed to load resource: the server responded with a status of 404 ()"
+      ]
+    }
+  },
+  "links": {
+    "https://med-handoff-card.sociobot.in/#main": 200,
+    "https://med-handoff-card.sociobot.in/": 200,
+    "https://med-handoff-card.sociobot.in/demo": 200,
+    "https://med-handoff-card.sociobot.in/#tools": 200,
+    "https://med-handoff-card.sociobot.in/privacy": 200,
+    "https://med-handoff-card.sociobot.in/terms": 200,
+    "https://med-handoff-card.sociobot.in/demo#main": 200,
+    "https://med-handoff-card.sociobot.in/demo#tools": 200
+  },
+  "keyboard": {
+    "skipFirst": true,
+    "skipOutline": "rgb(7, 90, 155) solid 3px",
+    "skipDestination": "",
+    "addOutline": "rgb(7, 90, 155) solid 3px",
+    "dialogInitialFocus": "name",
+    "dialogAccessibleName": "",
+    "scheduleError": "Choose at least one time of day.",
+    "errorLive": "assertive",
+    "spaceChecked": true,
+    "focusAfterSave": {
+      "tag": "BODY",
+      "text": "Skip to handoff board\n    MHMed HandoffCardBoardDemoTools◐ N",
+      "id": ""
+    },
+    "doseViaEnter": "true"
+  },
+  "resize": {
+    "clientWidth": 390,
+    "scrollWidth": 390,
+    "clipped": []
+  }
+}
