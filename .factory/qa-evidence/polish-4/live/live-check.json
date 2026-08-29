@@ -1,0 +1,65 @@
+{
+  "base": "https://med-handoff-card.sociobot.in",
+  "checkedAt": "2026-08-29T00:26:33.605Z",
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "title": "Med Handoff Card — caregiver medication handoffs",
+      "socialCard": "social-card.png"
+    },
+    {
+      "path": "/demo",
+      "status": 200,
+      "title": "Demo — Med Handoff Card",
+      "socialCard": "social-card.png"
+    },
+    {
+      "path": "/privacy",
+      "status": 200,
+      "title": "Privacy — Med Handoff Card",
+      "socialCard": "social-card.png"
+    },
+    {
+      "path": "/terms",
+      "status": 200,
+      "title": "Terms of use — Med Handoff Card",
+      "socialCard": "social-card.png"
+    },
+    {
+      "path": "/polish-4-missing",
+      "status": 404,
+      "title": "Page not found — Med Handoff Card",
+      "socialCard": "social-card.png"
+    }
+  ],
+  "cold": {
+    "oneClickDemo": true,
+    "firstScreenFacts": 3,
+    "socialUrl": "https://med-handoff-card.sociobot.in/social-card.png",
+    "socialType": "image/png",
+    "socialSize": {
+      "width": 1200,
+      "height": 630
+    },
+    "privacyFocus": true,
+    "backFocus": true
+  },
+  "demo": {
+    "banner": true,
+    "reset": true,
+    "startForReal": true,
+    "bedtimeCopy": true,
+    "oldBedtimeCopyAbsent": true,
+    "axeSeriousCriticalLight": 0,
+    "axeSeriousCriticalDark": 0,
+    "offlineReload": true,
+    "externalRequests": []
+  },
+  "mobile": {
+    "width": 390,
+    "zoomWidth": 390,
+    "noHorizontalOverflow": true
+  },
+  "errors": []
+}
