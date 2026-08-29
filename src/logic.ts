@@ -18,11 +18,11 @@ export function dueMeds(data: AppData, slot: Slot): Medication[] {
 
 export function handoffPayload(data: AppData, date = localDate()) {
   return {
-    version: 2,
+    version: 3,
     date,
     person: data.personName || 'Care recipient',
     note: data.shiftNote,
-    regimen: data.medications.filter(m => m.active).map(({ id, name, dose, instructions, slots }) => ({ medicationId: id, name, dose, instructions, slots })),
+    medicationList: data.medications.filter(m => m.active).map(({ id, name, dose, instructions, slots }) => ({ medicationId: id, name, dose, instructions, slots })),
     doses: data.logs.filter(log => log.date === date).map(({ medicationId, slot, state, note }) => ({ medicationId, slot, state, note }))
   }
 }

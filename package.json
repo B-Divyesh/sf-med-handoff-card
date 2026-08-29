@@ -7,10 +7,12 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "test": "npm run test:unit && npm run test:browser",
+    "test": "npm run test:copy-audit && npm run test:unit && npm run test:browser",
     "test:unit": "vitest run",
     "test:browser": "playwright test",
     "test:claims": "playwright test tests/claims.spec.ts",
+    "test:copy-audit": "node scripts/generate-copy-audit.mjs --check",
+    "copy:audit": "node scripts/generate-copy-audit.mjs",
     "test:type": "tsc -b --pretty false",
     "lint": "tsc -b --pretty false",
     "test:watch": "vitest"

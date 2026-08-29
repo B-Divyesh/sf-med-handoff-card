@@ -19,9 +19,21 @@ async function decodeQr(page: Page) {
     date: string
     person: string
     note: string
-    regimen: Array<{ medicationId: string, name: string, dose: string, instructions: string, slots: string[] }>
+    medicationList: Array<{ medicationId: string, name: string, dose: string, instructions: string, slots: string[] }>
     doses: Array<{ medicationId: string, slot: string, state: string, note: string }>
   }
+}
+
+async function realRecordBytes(page: Page) {
+  return page.evaluate(() => new Promise<number[]>((resolve, reject) => {
+    const request = indexedDB.open('med-handoff-card', 1)
+    request.onerror = () => reject(request.error)
+    request.onsuccess = () => {
+      const get = request.result.transaction('records', 'readonly').objectStore('records').get('current')
+      get.onerror = () => reject(get.error)
+      get.onsuccess = () => resolve(Array.from(new TextEncoder().encode(JSON.stringify(get.result ?? null))))
+    }
+  }))
 }
 
 test('@claim:demo-entry opens the complete isolated sample in one click', async ({ page }) => {
@@ -38,7 +50,7 @@ test('@claim:demo-entry opens the complete isolated sample in one click', async 
   await expect(page.getByRole('button', { name: 'Start for real' })).toBeVisible()
 })
 
-test('@claim:demo-isolation sample changes never enter the real record', async ({ page }) => {
+test('@claim:demo-isolation every demo action stays separate from the real record', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('button', { name: 'Add your first medication' }).click()
   await page.getByLabel('Medication name').fill('Real medication')
@@ -46,23 +58,73 @@ test('@claim:demo-isolation sample changes never enter the real record', async (
   await page.getByLabel('Morning').check()
   await page.getByRole('button', { name: 'Save medication' }).click()
   await expect(page.getByText('Real medication').first()).toBeVisible()
+  const before = await realRecordBytes(page)
+  expect(new TextDecoder().decode(new Uint8Array(before))).toContain('Real medication')
 
   await page.getByRole('link', { name: 'Demo' }).click()
   await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible()
   await expect(page.getByText('Nora Ellis')).toBeVisible()
   await expect(page.getByText('Metformin', { exact: true }).first()).toBeVisible()
   await expect(page.getByText('Real medication')).toHaveCount(0)
-  page.once('dialog', dialog => dialog.accept('Changed only in demo'))
-  await page.locator('[data-action="dose"][data-state="unknown"]').first().click()
+
+  page.once('dialog', dialog => dialog.accept('Demo recipient'))
+  await page.getByRole('button', { name: 'Nora Ellis' }).click()
+  await expect(page.getByRole('button', { name: 'Demo recipient' })).toBeVisible()
+  await page.locator('#shift-note').fill('Changed only in the sample.')
+  await page.locator('#shift-note').blur()
+  await expect(page.locator('#shift-note')).toHaveValue('Changed only in the sample.')
+
+  await page.getByRole('button', { name: 'Add medication' }).click()
+  await page.getByLabel('Medication name').fill('Demo-only medication')
+  await page.getByLabel('Dose / amount').fill('20 mg')
+  await page.getByLabel('Bedtime').check()
+  await page.getByRole('button', { name: 'Save medication' }).click()
+  let demoMedication = page.locator('#regimen li').filter({ hasText: 'Demo-only medication' })
+  await expect(demoMedication).toBeVisible()
+  await demoMedication.getByRole('button', { name: 'Edit' }).click()
+  await page.getByLabel('Dose / amount').fill('25 mg')
+  await page.getByRole('button', { name: 'Save medication' }).click()
+  demoMedication = page.locator('#regimen li').filter({ hasText: 'Demo-only medication' })
+  await expect(demoMedication).toContainText('25 mg')
+  page.once('dialog', dialog => {
+    expect(dialog.message()).toContain('Remove Demo-only medication from the current medication list')
+    void dialog.accept()
+  })
+  await demoMedication.getByRole('button', { name: 'Remove from current list' }).click()
+  await expect(page.locator('#regimen')).not.toContainText('Demo-only medication')
+
+  for (const [state, note] of [['taken', 'Demo taken'], ['held', 'Demo held'], ['unknown', 'Demo unknown']] as const) {
+    page.once('dialog', dialog => dialog.accept(note))
+    await page.locator(`[data-id="demo-metformin"][data-slot="Morning"][data-state="${state}"]`).click()
+    await expect(page.locator(`[data-id="demo-metformin"][data-slot="Morning"][data-state="${state}"]`)).toHaveAttribute('aria-pressed', 'true')
+  }
+
+  const now = new Date().toISOString()
+  const importedDemo = {
+    personName: 'Imported demo recipient',
+    shiftNote: 'Imported sample note.',
+    medications: [{ id: 'imported-demo-medication', name: 'Imported medication', dose: '1 mg', instructions: '', slots: ['Noon'], active: true, changedAt: now }],
+    logs: [],
+    regimenChanges: [],
+    updatedAt: now
+  }
+  page.once('dialog', dialog => {
+    expect(dialog.message()).toContain('Replace this device’s current record with the backup for Imported demo recipient')
+    void dialog.accept()
+  })
+  await page.locator('#import-file').setInputFiles({ name: 'demo-backup.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(importedDemo)) })
+  await expect(page.getByText('Imported demo recipient')).toBeVisible()
+  await page.getByRole('button', { name: 'Use night view' }).click()
+  expect(await page.evaluate(() => ({ keys: Object.keys(localStorage).sort(), theme: localStorage.getItem('demo:mhc_theme'), realTheme: localStorage.getItem('mhc_theme') }))).toEqual({ keys: ['demo:mhc_theme'], theme: 'dark', realTheme: null })
+
   await page.getByRole('button', { name: 'Reset demo' }).click()
   await expect(page.locator('[data-id="demo-metformin"][data-state="taken"]').first()).toHaveAttribute('aria-pressed', 'true')
-  page.once('dialog', dialog => dialog.accept('Changed only in demo'))
-  await page.locator('[data-action="dose"][data-state="unknown"]').first().click()
-  await page.reload()
-  await expect(page.locator('[data-id="demo-metformin"][data-state="taken"]').first()).toHaveAttribute('aria-pressed', 'true')
+  await expect(page.getByText('Nora Ellis')).toBeVisible()
   await page.getByRole('button', { name: 'Start for real' }).click()
   await expect(page.getByText('Real medication').first()).toBeVisible()
   await expect(page.getByText('Nora Ellis')).toHaveCount(0)
+  expect(await realRecordBytes(page)).toEqual(before)
+  expect(await page.evaluate(() => ({ keys: Object.keys(localStorage).sort(), theme: localStorage.getItem('demo:mhc_theme'), realTheme: localStorage.getItem('mhc_theme') }))).toEqual({ keys: ['demo:mhc_theme'], theme: 'dark', realTheme: null })
 })
 
 test('@claim:offline-reload demo reloads after the connection is removed', async ({ page, context }) => {
@@ -143,12 +205,12 @@ test('@claim:qr-contents includes the complete readable selected-date handoff', 
   await page.getByRole('button', { name: 'Show QR handoff' }).click()
   const payload = await decodeQr(page)
   expect(payload).toMatchObject({
-    version: 2,
+    version: 3,
     date,
     person: 'Nora Ellis',
     note: 'Nora ate breakfast. The evening Metformin dose still needs confirmation.'
   })
-  expect(payload.regimen).toEqual([
+  expect(payload.medicationList).toEqual([
     { medicationId: 'demo-metformin', name: 'Metformin', dose: '500 mg', instructions: 'with food', slots: ['Morning', 'Evening'] },
     { medicationId: 'demo-lisinopril', name: 'Lisinopril', dose: '10 mg', instructions: 'check the written care plan', slots: ['Morning'] },
     { medicationId: 'demo-vitamin-d', name: 'Vitamin D3', dose: '1,000 IU', instructions: 'with lunch', slots: ['Noon'] }
@@ -197,7 +259,7 @@ test('@claim:free-tools exposes every handoff tool without a checkout', async ({
   await expect(page.locator('a[href*="checkout"]')).toHaveCount(0)
 })
 
-async function addMedication(page: Page, name = 'Test medicine') {
+async function addMedication(page: Page, name = 'Test medication') {
   await page.getByRole('button', { name: /Add (your first )?medication/ }).click()
   await page.getByLabel('Medication name').fill(name)
   await page.getByLabel('Dose / amount').fill('5 mg')
@@ -206,36 +268,39 @@ async function addMedication(page: Page, name = 'Test medicine') {
   await page.getByRole('button', { name: 'Save medication' }).click()
 }
 
-test('@claim:current-medication-list retains complete regimen details after reload', async ({ page }) => {
+test('@claim:current-medication-list retains complete medication-list details after reload', async ({ page }) => {
   await page.goto('/')
-  await addMedication(page, 'Current list medicine')
+  await addMedication(page, 'Current list medication')
   await page.reload()
-  await expect(page.getByText('Current list medicine').first()).toBeVisible()
+  await expect(page.getByText('Current list medication').first()).toBeVisible()
   await expect(page.getByText('5 mg · Morning', { exact: true })).toBeVisible()
   await expect(page.getByText('with breakfast', { exact: true })).toBeVisible()
 })
 
-test('@claim:dose-state-notes retains a held dose and caregiver note after reload', async ({ page }) => {
+test('@claim:dose-state-notes retains Taken, Held, and Unknown with optional notes after reload', async ({ page }) => {
   await page.goto('/')
-  await addMedication(page, 'Held medicine')
-  page.once('dialog', dialog => dialog.accept('Asked the pharmacist to confirm'))
-  await page.locator('[data-action="dose"][data-state="held"]').click()
-  await page.reload()
-  await expect(page.getByRole('button', { name: 'Held' })).toHaveAttribute('aria-pressed', 'true')
-  await expect(page.getByText('“Asked the pharmacist to confirm”', { exact: true })).toBeVisible()
+  await addMedication(page, 'State-test medication')
+  for (const [state, note] of [['taken', 'Taken after breakfast'], ['held', 'Asked the pharmacist to confirm'], ['unknown', '']] as const) {
+    page.once('dialog', dialog => dialog.accept(note))
+    await page.locator(`[data-action="dose"][data-state="${state}"]`).click()
+    await page.reload()
+    await expect(page.locator(`[data-action="dose"][data-state="${state}"]`)).toHaveAttribute('aria-pressed', 'true')
+    if (note) await expect(page.getByText(`“${note}”`, { exact: true })).toBeVisible()
+    else await expect(page.locator('.dose-note')).toHaveCount(0)
+  }
 })
 
 test('@claim:real-record-retention keeps a saved real medication after reload', async ({ page }) => {
   await page.goto('/')
-  await addMedication(page, 'Persistent medicine')
+  await addMedication(page, 'Persistent medication')
   await page.reload()
-  await expect(page.getByText('Persistent medicine').first()).toBeVisible()
+  await expect(page.getByText('Persistent medication').first()).toBeVisible()
 })
 
-test('@claim:regimen-history records the prior and new regimen', async ({ page }) => {
+test('@claim:regimen-history records the prior and new medication-list entry', async ({ page }) => {
   await page.goto('/')
-  await addMedication(page, 'Changing medicine')
-  await expect(page.getByText('Medication started')).toBeVisible()
+  await addMedication(page, 'Changing medication')
+  await expect(page.getByText('Added to current list')).toBeVisible()
   await page.getByRole('button', { name: 'Edit' }).click()
   await page.getByLabel('Dose / amount').fill('10 mg')
   await page.getByRole('checkbox', { name: 'Morning' }).uncheck()
@@ -245,9 +310,9 @@ test('@claim:regimen-history records the prior and new regimen', async ({ page }
   await expect(page.getByText('Was 5 mg · Morning. Now 10 mg · Evening.')).toBeVisible()
 })
 
-test('@claim:stopped-history retains the dose and regimen trail after the last medication stops', async ({ page }) => {
+test('@claim:stopped-history retains the dose and medication-list trail after removal', async ({ page }) => {
   await page.goto('/')
-  await addMedication(page, 'Stopped medicine')
+  await addMedication(page, 'Removed medication')
   page.once('dialog', dialog => dialog.accept('Waiting for a new prescription'))
   await page.locator('[data-action="dose"][data-state="held"]').click()
   await page.getByRole('button', { name: 'Edit' }).click()
@@ -255,21 +320,26 @@ test('@claim:stopped-history retains the dose and regimen trail after the last m
   await page.getByRole('checkbox', { name: 'Morning' }).uncheck()
   await page.getByRole('checkbox', { name: 'Evening' }).check()
   await page.getByRole('button', { name: 'Save medication' }).click()
-  page.once('dialog', dialog => dialog.accept())
-  await page.getByRole('button', { name: 'Stop' }).click()
+  page.once('dialog', dialog => {
+    expect(dialog.message()).toContain('Remove Removed medication from the current medication list')
+    void dialog.accept()
+  })
+  await page.getByRole('button', { name: 'Remove from current list' }).click()
   await page.reload()
   await expect(page.getByRole('heading', { name: 'Today’s handoff' })).toBeVisible()
   await expect(page.getByText('No current medications yet.')).toBeVisible()
-  await expect(page.getByText('Medication stopped')).toBeVisible()
+  await expect(page.getByText('Removed from current list')).toBeVisible()
+  await expect(page.getByText('Previously listed: 10 mg · Evening.')).toBeVisible()
   await expect(page.getByText('Existing dose history stays in this record.')).toBeVisible()
   await expect(page.getByText('Ⅱ Held')).toBeVisible()
   await expect(page.getByText('“Waiting for a new prescription”')).toBeVisible()
   await expect(page.getByText('Was 5 mg · Morning. Now 10 mg · Evening.')).toBeVisible()
+  await expect(page.locator('body')).not.toContainText(/\bregimen\b/i)
 })
 
 test('@claim:no-future-doses rejects future dates before a dose can be recorded', async ({ page }) => {
   await page.goto('/')
-  await addMedication(page, 'Date-boundary medicine')
+  await addMedication(page, 'Date-boundary medication')
   const today = await page.locator('#date').getAttribute('max')
   await page.locator('#date').fill('2099-12-31')
   await expect(page.locator('#date')).toHaveValue(today!)

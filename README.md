@@ -4,12 +4,12 @@ Track scheduled doses and leave a clear medication handoff for the next family c
 
 The app records each dose as **Taken**, **Held**, or **Unknown**. It is a caregiver record, not medical advice.
 
-[Try it with sample data](https://med-handoff-card.sociobot.in/?demo=1). The demo is isolated from your real record.
+[Try it with sample data](https://med-handoff-card.sociobot.in/?demo=1). Demo actions never change your real record.
 
 ## What it does
 
 - Keeps a current medication list with amounts, directions, and times.
-- Records a dose state and optional caregiver note.
+- Records Taken, Held, or Unknown with an optional caregiver note.
 - Records medication list changes and keeps prior dose history visible.
 - Prints the included eight-medication test fixture on one A4 or Letter page.
 - Creates a local QR handoff until you hide it or close the page.

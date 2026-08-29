@@ -11,6 +11,22 @@ test('how-to heading and third step name the caregiver actions', async ({ page }
   await expect(section).not.toContainText('Hand it over.')
 })
 
+test('public copy uses one medication-list term and direct caregiver language', async ({ page }) => {
+  for (const path of ['/', '/demo', '/privacy', '/terms', '/404.html']) {
+    await page.goto(path)
+    const publicCopy = await page.evaluate(() => [
+      document.body.innerText,
+      ...Array.from(document.querySelectorAll<HTMLElement>('[placeholder], [title], [aria-label]')).map(element => `${element.getAttribute('placeholder') ?? ''} ${element.getAttribute('title') ?? ''} ${element.getAttribute('aria-label') ?? ''}`)
+    ].join(' '))
+    expect(publicCopy).not.toMatch(/\bmedicine\b/i)
+    expect(publicCopy).not.toMatch(/\bregimen\b/i)
+    expect(publicCopy).not.toContain('care changes hands')
+    expect(publicCopy).not.toContain('shift card')
+  }
+  await page.goto('/')
+  await expect(page.getByText('For adult children and home caregivers who need a clear record when another caregiver takes over.')).toBeVisible()
+})
+
 test('public footer omits the untestable artwork provenance claim', async ({ page }) => {
   for (const path of ['/', '/demo', '/privacy', '/terms', '/404.html']) {
     await page.goto(path)
@@ -88,7 +104,7 @@ test('keyboard opens the medication dialog, focuses its label, and announces err
   await page.getByRole('button', { name: 'Add your first medication' }).focus()
   await page.keyboard.press('Enter')
   await expect(page.getByLabel('Medication name')).toBeFocused()
-  await page.getByLabel('Medication name').fill('Test medicine')
+  await page.getByLabel('Medication name').fill('Test medication')
   await page.getByLabel('Dose / amount').fill('10 mg')
   await page.getByRole('button', { name: 'Save medication' }).click()
   await expect(page.locator('.form-error')).toHaveText('Choose at least one time of day.')
@@ -125,7 +141,7 @@ test('invalid backup, blank required fields, dialog naming, and focus recovery a
   await expect(page.getByRole('heading', { name: 'Track medication handoffs between family caregivers.' })).toBeVisible()
 
   await page.getByRole('button', { name: 'Add your first medication' }).click()
-  await page.getByLabel('Medication name').fill('Focus medicine')
+  await page.getByLabel('Medication name').fill('Focus medication')
   await page.getByLabel('Dose / amount').fill('5 mg')
   await page.getByLabel('Morning').check()
   await page.getByRole('button', { name: 'Save medication' }).click()
