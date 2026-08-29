@@ -1,59 +1,43 @@
-# Med Handoff Card — polish round 5 handoff
+# Med Handoff Card — review 6 handoff
 
 ## Status
 
-**PASS.** All findings in reviews 1–5 are repaired or reverified with current
-evidence. Repair commit `eea16ef98271edd5ea0bcea988bc038b60b7d702` is pushed
-to `main` and deployed to <https://med-handoff-card.sociobot.in>.
+**PASS.** Adversarial review 6 found zero blocking or minor findings. No product
+code was changed; this handoff and .factory/review-6.md are the only
+working-tree changes.
 
-The release now proves the whole public demo-isolation promise, uses only
-“medication,” “current medication list,” and “handoff” in public copy, uses a
-non-clinical removal action, covers all three dose states, and generates the
-copy audit from checked source strings.
+## What was verified
+
+- Fresh live cold-read at 390 × 844 and desktop: the job, audience, and
+  one-click sample action are clear before scrolling.
+- The one-click and direct demo show Nora Ellis with realistic sample data,
+  retain the banner/reset/start-real controls, remain isolated from real
+  storage, and reload offline after service-worker control.
+- All 17 exact commands in .factory/claims.json passed individually from a
+  fresh clone at /tmp/mhc-review6-clone-8kKXTw.
+- In that clone, npm test passed 3 unit tests and 33 Chromium tests; npm run
+  test:type, npm run lint, and npm run build passed and produced dist/.
+- A fresh live audit passed mobile layout, route focus, designed 404,
+  same-origin request logging, offline demo reload, and zero serious/critical
+  axe findings in light and night themes. A live link/metadata crawl found no
+  dead internal links.
+- Every finding from reviews 1–5 was rechecked live and in current source/tests;
+  none regressed. The full evidence and copy inventory are in review-6.md.
 
 ## Run and verify
 
-```sh
-npm ci
-npm test
-npm run test:type
-npm run lint
-npm run build
-node scripts/live-audit.mjs https://med-handoff-card.sociobot.in .factory/qa-evidence/polish-5/live
-```
+    npm ci
+    npm test
+    npm run test:type
+    npm run lint
+    npm run build
+    node scripts/live-audit.mjs https://med-handoff-card.sociobot.in /tmp/mhc-live-audit
 
 Open the isolated sample at
-<https://med-handoff-card.sociobot.in/?demo=1>. It is a one-click, in-memory
-sample with a persistent banner, **Reset demo**, and **Start for real**.
-
-## Exact verification evidence
-
-- Fresh no-local clone of `eea16ef98271edd5ea0bcea988bc038b60b7d702`:
-  `npm ci`, all 17 exact commands in `.factory/claims.json` individually,
-  `npm test`, `npm run test:type`, `npm run lint`, and `npm run build` passed.
-  The full suite passed 3 unit tests and 33 Chromium tests.
-- The expanded `@claim:demo-isolation` changes recipient, shift note,
-  medication list add/edit/remove, Taken/Held/Unknown states, import, and
-  theme; reset/exit then compare the real IndexedDB record as UTF-8 bytes and
-  assert that only `demo:` preferences exist.
-- Production route verification passed home, direct demo, Privacy, and Terms
-  with HTTP 200, a title, `lang=en`, one `h1`, `main`, image alt text, and no
-  console errors. See `qa-evidence/polish-5/live/verify-url/`.
-- Production live audit passed cold first-screen copy, 390 px layout, one-click
-  demo, safe removal wording/history, route focus, 404, same-origin requests,
-  both-theme axe, and offline demo reload. See
-  `qa-evidence/polish-5/live/live-audit.json` and its screenshots.
-- Production Lighthouse mobile: Performance 100, Accessibility 100, Best
-  Practices 100, SEO 100; FCP 0.9 s, LCP 1.8 s, TBT 0 ms, CLS 0. See
-  `qa-evidence/polish-5/live/lighthouse-mobile.json`.
-- `dist/index.html`, `dist/assets/main-DueSphsR.js`, and `dist/sw.js` match the
-  live SHA-256 bytes. The live route matrix was `/` 200, `/demo` 200,
-  `/privacy` 200, `/terms` 200, and an unknown URL 404.
-
-The complete finding-to-change-to-evidence matrix is in
-`.factory/polish-5.md`.
+<https://med-handoff-card.sociobot.in/?demo=1>. It has a persistent demo
+banner, **Reset demo**, and **Start for real**.
 
 ## Known gaps and next steps
 
-None. The product remains a local-first static PWA; no account, analytics,
-third-party runtime code, or new service dependency was introduced.
+None. The product remains a local-first static progressive web app with no
+account, analytics, third-party runtime code, or AI/provider key.
