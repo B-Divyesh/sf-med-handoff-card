@@ -25,7 +25,7 @@ let demoMode = isDemoUrl()
 const themeKey = () => demoMode ? 'demo:mhc_theme' : 'mhc_theme'
 let theme = localStorage.getItem(themeKey()) || 'light'
 let focusAfterRender = ''
-const BUILD_ID = '2026.08.28-polish.3'
+const BUILD_ID = '2026.08.29-polish.4'
 
 async function save(next = data) {
   data = next
@@ -73,7 +73,7 @@ function howItWorks() {
 
 function slotBoard(slot: Slot) {
   const meds = dueMeds(data, slot)
-  return `<article class="slot"><header><h3>${slot}</h3><span>${meds.length ? `${meds.length} due` : 'Nothing due'}</span></header>${meds.length ? meds.map(med => doseRow(med, slot)).join('') : '<p class="slot-empty">No current medications at this time.</p>'}</article>`
+  return `<article class="slot"><header><h3>${slot}</h3><span>${meds.length ? `${meds.length} due` : 'Nothing due'}</span></header>${meds.length ? meds.map(med => doseRow(med, slot)).join('') : '<p class="slot-empty">No doses are scheduled at this time.</p>'}</article>`
 }
 
 function doseRow(med: Medication, slot: Slot) {

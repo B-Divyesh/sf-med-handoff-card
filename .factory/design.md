@@ -69,5 +69,7 @@ an untestable visitor-facing claim. It is optimized to WebP and must remain
 under 300 KB.
 
 Social preview: `public/social-card.svg` is a hand-authored 1200 × 630 vector
-composition using the same paper, cobalt, marigold, and pill-tray motifs. It is
-original product artwork and contains no third-party material.
+composition using the same paper, cobalt, marigold, and pill-tray motifs.
+`public/social-card.png` is its reviewed 1200 × 630 Chromium raster rendering,
+used for Open Graph and Twitter compatibility. Both are original product
+artwork and contain no third-party material.

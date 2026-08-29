@@ -1,6 +1,6 @@
 # Copy audit
 
-Audited 2026-08-28 for polish round 3. Counts use whitespace-delimited words. No sentence exceeds 22 words. No banned marketing word appears.
+Audited 2026-08-29 for polish round 4. Counts use whitespace-delimited words. No sentence exceeds 22 words. No banned marketing word appears.
 
 ## First screen
 
@@ -56,6 +56,7 @@ The headline names the job in six words. The audience sentence names the situati
 | No dose states or medication list changes were recorded for this date. | 12 |
 | Existing dose history stays in this record. | 7 |
 | Future doses cannot be recorded. | 5 |
+| No doses are scheduled at this time. | 7 |
 
 ## Legal and missing-page routes
 

@@ -18,6 +18,33 @@ test('public footer omits the untestable artwork provenance claim', async ({ pag
   }
 })
 
+test('demo Bedtime states that no doses are scheduled, not that medications are absent', async ({ page }) => {
+  await page.goto('/demo')
+  const bedtime = page.locator('.slot').filter({ has: page.getByRole('heading', { name: 'Bedtime' }) })
+  await expect(bedtime).toContainText('No doses are scheduled at this time.')
+  await expect(bedtime).not.toContainText('No current medications at this time.')
+})
+
+test('every route declares a self-hosted PNG social card', async ({ page, request }) => {
+  const socialCard = 'https://med-handoff-card.sociobot.in/social-card.png'
+  for (const path of ['/', '/demo', '/privacy', '/terms', '/404.html']) {
+    await page.goto(path)
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', socialCard)
+    await expect(page.locator('meta[property="og:image:type"]')).toHaveAttribute('content', 'image/png')
+    await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute('content', socialCard)
+  }
+  const response = await request.get('/social-card.png')
+  expect(response.ok()).toBe(true)
+  expect(response.headers()['content-type']).toMatch(/^image\/png(?:;|$)/)
+  const size = await page.evaluate(async () => new Promise<{ width: number, height: number }>((resolve, reject) => {
+    const image = new Image()
+    image.onload = () => resolve({ width: image.naturalWidth, height: image.naturalHeight })
+    image.onerror = () => reject(new Error('Social card could not be decoded'))
+    image.src = '/social-card.png'
+  }))
+  expect(size).toEqual({ width: 1200, height: 630 })
+})
+
 test('desktop and mobile have one heading, no console errors, and no serious axe findings', async ({ browser }) => {
   for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
     const context = await browser.newContext({ viewport })
@@ -182,7 +209,7 @@ test('a waiting service worker is told to activate before the app reloads', asyn
     await page.evaluate(() => navigator.serviceWorker.ready)
     await page.reload()
     await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true)
-    await writeFile(workerPath, original.replace("med-handoff-v7", `med-handoff-v7-test-${Date.now()}`))
+    await writeFile(workerPath, original.replace(/med-handoff-v\d+/, `med-handoff-update-test-${Date.now()}`))
     await page.evaluate(async () => { const registration = await navigator.serviceWorker.getRegistration(); await registration?.update() })
     await expect(page.getByRole('button', { name: 'Install update' })).toBeVisible()
     const loaded = page.waitForEvent('load')
