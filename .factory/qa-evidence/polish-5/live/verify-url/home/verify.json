@@ -1,0 +1,14 @@
+{
+  "url": "https://med-handoff-card.sociobot.in/",
+  "loadMs": 835,
+  "errors": [],
+  "a11y": {
+    "title": "Med Handoff Card — caregiver medication handoffs",
+    "lang": "en",
+    "h1": 1,
+    "main": true,
+    "imgsMissingAlt": 0,
+    "buttonsUnlabeled": 0,
+    "textLength": 1352
+  }
+}

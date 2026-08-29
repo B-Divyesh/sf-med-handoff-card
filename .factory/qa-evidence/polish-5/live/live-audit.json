@@ -1,0 +1,32 @@
+{
+  "baseUrl": "https://med-handoff-card.sociobot.in",
+  "checks": {
+    "firstScreen": {
+      "title": "Med Handoff Card — caregiver medication handoffs",
+      "headline": "Track medication handoffs between family caregivers.",
+      "audience": "For adult children and home caregivers who need a clear record when another caregiver takes over.",
+      "copy": "Skip to handoff board\nMH\nMed Handoff\nCard\nBoard\nDemo\nTools\nPrivacy\n◐ Use night view\n\nPRIVATE CAREGIVER RECORD\n\nTrack medication handoffs between family caregivers.\n\nFor adult children and home caregivers who need a clear record when another caregiver takes over.\n\nTry it with sample data\nOpen a filled sample handoff in one click.\nAdd your first medication\nMedication records stay in this browser.\nThe board works offline after your first visit.\nPrinting, QR handoffs, and exports are free.\n\nHOW IT WORKS\n\nCreate a medication handoff in three steps\nAdd the current medication list.\nEnter each medication, amount, and scheduled time.\nMark each dose.\nChoose Taken, Held, or Unknown and add a note.\nPrint, share, or back up the handoff.\nPrint for the next caregiver, show the QR code in person, or save a backup for yourself.\n\nHANDOFF TOOLS\n\nPrint, share, or back up the handoff\n\nPrint the handoff, show its QR code to another caregiver, or save your own backup.\n\nPrint handoff\nShow QR handoff\nExport backup\nImport backup\n\nA QR handoff contains the selected date, current medication list, and dose states. Anyone who scans it can read it, so share it only with someone you trust.\n\nTrack medication handoffs between family caregivers.\nPrivacy Terms\nBuilt by Param Factory · version 2026.08.29-polish.5 · The app loads no analytics or code from other sites.",
+      "metadata": {
+        "canonical": "https://med-handoff-card.sociobot.in/",
+        "ogImage": "https://med-handoff-card.sociobot.in/social-card.png",
+        "twitterImage": "https://med-handoff-card.sociobot.in/social-card.png"
+      }
+    },
+    "mobile": {
+      "width": 390,
+      "viewport": 390
+    },
+    "oneClickDemo": true,
+    "removalSafety": true,
+    "routingFocus": true,
+    "missingRoute404": true,
+    "sameOriginRequests": true,
+    "axe": {
+      "lightSeriousOrCritical": 0,
+      "darkSeriousOrCritical": 0
+    },
+    "offlineReload": true,
+    "normalConsoleErrors": 0
+  },
+  "errors": []
+}
