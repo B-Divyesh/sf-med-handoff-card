@@ -1,28 +1,31 @@
-# Med Handoff Card — review 6 handoff
+# Med Handoff Card — review 7 handoff
 
 ## Status
 
-**PASS.** Adversarial review 6 found zero blocking or minor findings. No product
-code was changed; this handoff and .factory/review-6.md are the only
-working-tree changes.
+**PASS.** Independent review 7 found zero findings and zero untested public
+claims. No product code was changed; this handoff and `.factory/review-7.md`
+are the product-repository changes.
 
 ## What was verified
 
-- Fresh live cold-read at 390 × 844 and desktop: the job, audience, and
-  one-click sample action are clear before scrolling.
-- The one-click and direct demo show Nora Ellis with realistic sample data,
-  retain the banner/reset/start-real controls, remain isolated from real
-  storage, and reload offline after service-worker control.
-- All 17 exact commands in .factory/claims.json passed individually from a
-  fresh clone at /tmp/mhc-review6-clone-8kKXTw.
-- In that clone, npm test passed 3 unit tests and 33 Chromium tests; npm run
-  test:type, npm run lint, and npm run build passed and produced dist/.
-- A fresh live audit passed mobile layout, route focus, designed 404,
-  same-origin request logging, offline demo reload, and zero serious/critical
-  axe findings in light and night themes. A live link/metadata crawl found no
-  dead internal links.
-- Every finding from reviews 1–5 was rechecked live and in current source/tests;
-  none regressed. The full evidence and copy inventory are in review-6.md.
+- Fresh live phone (390 × 844) and desktop (1440 × 900) reads named the job,
+  audience, and one-click sample action before scrolling, with no console
+  errors.
+- The one-click and direct demo show Nora Ellis with realistic medication,
+  dose-state, and note data. The persistent demo boundary, reset, start-real,
+  isolation, and offline reload all passed.
+- From clean clone `/tmp/mhc-review7-clone-rk9AU7`, `npm test` (3 unit and 33
+  browser tests), type check, lint, build, every one of 17 exact claim commands,
+  and the 17-test claim suite passed. `dist/` was produced.
+- The live output byte-matches a fresh build. The reviewed implementation SHA
+  is `eea16ef98271edd5ea0bcea988bc038b60b7d702`; the documentation SHA is
+  `7ecb1c5b2bf63325433a7d31bf8be6fa1b85ef15`.
+- Live checks covered normal, invalid, recovery, accessibility, privacy,
+  keyboard, mobile, reduced-motion, metadata, legal routes, intentional 404,
+  offline, and service-worker update behavior. There were zero serious or
+  critical Axe issues in light or night view.
+- All previous verification and review findings, including every minor one,
+  were rechecked and remain closed. See `.factory/review-7.md` for evidence.
 
 ## Run and verify
 
